@@ -1,0 +1,37 @@
+/**/controller_manager:
+  ros__parameters:
+    hand_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+    rm_group_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+    update_rate: 30
+/**/hand_controller:
+  ros__parameters:
+    allow_nonzero_velocity_at_trajectory_end: false
+    command_interfaces:
+    - position
+    joints:
+    - rml_63/joint01
+    - rml_63/joint11
+    - rml_63/joint02
+    - rml_63/joint22
+    state_interfaces:
+    - position
+    - velocity
+/**/rm_group_controller:
+  ros__parameters:
+    allow_nonzero_velocity_at_trajectory_end: false
+    command_interfaces:
+    - position
+    joints:
+    - rml_63/joint1
+    - rml_63/joint2
+    - rml_63/joint3
+    - rml_63/joint4
+    - rml_63/joint5
+    - rml_63/joint6
+    state_interfaces:
+    - position
+    - velocity
