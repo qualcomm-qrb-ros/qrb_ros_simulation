@@ -1,0 +1,13 @@
+# config.yaml
+world_model: "warehouse"
+robot_group_args:
+  - robot_name: "rml_63_arm_robot"      # name of robot entity
+    arm_ns: "rml_63"                    # namespace of robot arm model
+    enable_rgb_camera: "true"          # enable/Disable RGB camera sensor in simulator
+    enable_depth_camera: "true"        # enable/Disable depth camera sensor in simulator
+    initial_x: "2.0"                    # robot model's initial position in the world
+    initial_y: "-2.0"
+    initial_z: "1.03"
+    initial_roll: "0.0"
+    initial_pitch: "0.0"
+    initial_yaw: "3.14159"

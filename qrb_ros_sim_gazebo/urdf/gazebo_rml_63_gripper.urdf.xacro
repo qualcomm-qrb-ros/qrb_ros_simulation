@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2025 Qualcomm Innovation Center, Inc. All rights reserved.
+# SPDX-License-Identifier: BSD-3-Clause-Clear -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="$(arg robot_name)">
+  <xacro:arg name="arm_ns" default=""/>
+  <xacro:property name="arm_ns_slash" value="${'$(arg arm_ns)/' if '$(arg arm_ns)' != '' else ''}" />
+  <!-- Import description urdf file -->
+  <xacro:include filename="$(find qrb_ros_sim_description)/urdf/rml_63_gripper_arm/rml_63.urdf" />
+  <xacro:include filename="$(find qrb_ros_sim_description)/urdf/rml_63_gripper_arm/gripper.urdf" />
+  <xacro:include filename="$(find qrb_ros_sim_description)/urdf/orbbec_cameras/gemini335_336.urdf.xacro" />
+
+  <xacro:rml_63 ns="$(arg arm_ns)"/>
+  <xacro:rml_gripper ns="$(arg arm_ns)"/>
+  <xacro:gemini_335_336 ns="$(arg arm_ns)"/>
+
+  <!-- RGB camera -->
+  <xacro:arg name="enable_rgb_camera" default="false"/>
+  <xacro:if value="$(arg enable_rgb_camera)" >
+    <xacro:include filename="$(find qrb_ros_sim_gazebo)/urdf/xacro/gazebo_rgb_camera.xacro" />
+    <xacro:gazebo_camera ns="$(arg arm_ns)" reference_link="${arm_ns_slash}camera_color_frame"
+      camera_params_yaml_path="$(find qrb_ros_sim_gazebo)/config/params/rgb_camera_params.yaml"/>
+  </xacro:if>
+  <!-- Depth camera -->
+  <xacro:arg name="enable_depth_camera" default="false"/>
+  <xacro:if value="$(arg enable_depth_camera)" >
+    <xacro:include filename="$(find qrb_ros_sim_gazebo)/urdf/xacro/gazebo_depth_camera.xacro" />
+    <xacro:gazebo_depth_camera ns="$(arg arm_ns)" reference_link="${arm_ns_slash}camera_depth_frame"
+      depth_camera_params_yaml_path="$(find qrb_ros_sim_gazebo)/config/params/depth_camera_params.yaml"/>
+  </xacro:if>
+
+  <joint name="${arm_ns_slash}arm_camera_joint" type="fixed">
+    <origin xyz="0.080 0 0.015" rpy="3.1415926 -1.570796 0"/>
+    <parent link="${arm_ns_slash}link6"/>
+    <child link="${arm_ns_slash}camera_link"/>
+  </joint>
+
+  <link name="world"/>
+  <joint name="${arm_ns_slash}arm_virtual_joint" type="fixed">
+    <parent link="world"/>
+    <child link="${arm_ns_slash}arm_base_link"/>
+  </joint>
+
+  <!-- ros2_control -->
+  <xacro:include filename="$(find qrb_ros_sim_gazebo)/urdf/xacro/rml_63_gripper_ros2_control.xacro" />
+  <xacro:rml_63_gripper_ros2_control arm_ns="$(arg arm_ns)" robot_desc_ns="$(arg arm_ns)"
+      initial_positions_yaml_path="$(find qrb_ros_sim_gazebo)/config/params/initial_positions.yaml"/>
+</robot>
+
