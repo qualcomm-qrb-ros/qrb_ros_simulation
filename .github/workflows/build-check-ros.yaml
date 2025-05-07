@@ -1,0 +1,17 @@
+name: Build Test with ROS
+
+on: [push, pull_request]
+
+jobs:
+  build_in_ros_docker:
+    runs-on: ubuntu-24.04
+    container: ros:jazzy
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+ 
+      - name: Build
+        shell: bash
+        run: |
+          source /opt/ros/jazzy/setup.bash
+          colcon build
