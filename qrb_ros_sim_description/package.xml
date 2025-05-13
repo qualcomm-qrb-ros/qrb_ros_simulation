@@ -6,7 +6,7 @@
   <description>
      package for Qualcomm robotic models description
   </description>
-  <maintainer email="quic_weijshen@quicinc.com">Weijie Shen</maintainer>
+  <maintainer email="weijshen@qti.qualcomm.com">Weijie Shen</maintainer>
   <license>BSD-3-Clause-Clear</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
