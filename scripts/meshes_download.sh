@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
+# SPDX-License-Identifier: BSD-3-Clause-Clear
+
 # Check for required command
 if ! command -v curl &> /dev/null; then
     echo "Error: curl is required but not installed. Please install curl first."
@@ -11,8 +14,9 @@ declare -A BASE_URLS=(
     ["gemini335_336"]="https://github.com/orbbec/OrbbecSDK_ROS2/raw/f29d69ad8f81d0b6914ecb712c98e2a20fab7b92/orbbec_description/meshes/gemini335_336/"
 )
 
-save_path_rml_63="qrb_ros_sim_description/meshes/rml_63_gripper_arm"
-save_path_gemini335_336="qrb_ros_sim_description/meshes/gemini335_336"
+current_dir=$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")
+save_path_rml_63="${current_dir}/../qrb_ros_sim_description/meshes/rml_63_gripper_arm"
+save_path_gemini335_336="${current_dir}/../qrb_ros_sim_description/meshes/gemini335_336"
 # Format: ["BASE_KEY:relative/path/filename"]="local_save_path"
 declare -A FILE_MAPPINGS=(
     # rml_63_arm

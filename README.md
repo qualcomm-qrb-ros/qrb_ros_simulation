@@ -12,44 +12,86 @@
 > This document 's build & run is the latest.
 > If it conflict with the online document, please follow this.
 
-We provide one way to use this package on host machine.
+You can use this package on host.
 
-<details>
-<summary>ubuntu24.04</summary>
+#### Download qrb_ros_simulation and meshes files
 
-#### Setup
-1. Please follow this [steps](https://docs.ros.org/en/jazzy/Installation/Ubuntu-Install-Debs.html) to install ros-jazzy-desktop and setup ROS env.
-2. Install gazebo with ROS and other dependencies
-```bash
-sudo apt-get install -y ros-jazzy-ros-gz ros-jazzy-gz-ros2-control ros-jazzy-ros2-controllers
-source /opt/ros/jazzy/setup.bash
-```
-3. Download qrb_ros_simulation and meshes files
 ```bash
 mkdir -p ~/qrb_ros_simulation_ws
 cd ~/qrb_ros_simulation_ws
 git clone https://github.com/qualcomm-qrb-ros/qrb_ros_simulation.git
 cd qrb_ros_simulation
-chmod +x meshes_download.sh
-./meshes_download.sh
+chmod +x scripts/meshes_download.sh
+./scripts/meshes_download.sh
 ```
 
+#### Setup
+
+You can setup ROS2 Jazzy on your host machine with ubuntu24.04 OR you can use a Docker-based development environment directly.
+
+<details>
+<summary>ubuntu24.04</summary>
+
+1. Please follow this [steps](https://docs.ros.org/en/jazzy/Installation/Ubuntu-Install-Debs.html) to install ros-jazzy-desktop and setup ROS env.
+2. Install gazebo with ROS and other dependencies
+```bash
+sudo apt-get install -y ros-jazzy-ros-gz ros-jazzy-gz-ros2-control ros-jazzy-ros2-controllers
+```
+
+Next, you can follow the steps of [​**​Build**](#build)​​ and ​[​**Run**](#run) to launch the simulation.environment
+
+</details>
+
+<details>
+<summary>docker</summary>
+
+1. Build the docker image locally
+```bash
+cd qrb_ros_simulation
+chmod +x scripts/docker_build.sh
+./scripts/docker_build.sh
+```
+2. Start a docker container
+```bash
+chmod +x scripts/docker_run.sh
+./scripts/docker_run.sh
+```
+3. Copy the qrb_ros_simulation project to the docker container
+```bash
+docker cp ~/qrb_ros_simulation_ws qrb_ros_simulation_container:/root/qrb_ros_simulation_ws
+```
+4. Enable SSH service in the docker container
+```bash
+# set the password of user root
+(docker) passwd
+# enable SSH service
+(docker) service ssh start
+```
+5. Login to the docker container by SSH
+```bash
+ssh -X -p 222 root@your_host_ip
+```
+
+Next, you can follow the steps of [​**​Build**](#build)​​ and ​[​**Run**](#run) to launch the simulation environment within the Docker container.
+
+</details>
 
 #### Build
+
 ```bash
+source /opt/ros/jazzy/setup.bash
 cd ~/qrb_ros_simulation_ws
 colcon build
+source install/local_setup.sh
 ```
 
 #### Run
 
-```bash
-source install/local_setup.sh
-```
-
 Four pre-configured robotic models are ready for immediate launch. 
 
-##### RML-63 robotic arm
+<details>
+<summary>RML-63 robotic arm</summary>
+
 1. launch RML-63 robotic arm in gazebo
 ```bash
 ros2 launch qrb_ros_sim_gazebo gazebo_rml_63_gripper.launch.py
@@ -61,15 +103,27 @@ cd ~/qrb_ros_simulation_ws
 source install/local_setup.sh
 ros2 launch qrb_ros_sim_gazebo gazebo_rml_63_gripper_load_controller.launch.py
 ```
-##### QRB Robot Base AMR
+</details>
+
+<details>
+<summary>QRB Robot Base AMR</summary>
+
 ```bash
 ros2 launch qrb_ros_sim_gazebo gazebo_robot_base.launch.py
 ```
-##### QRB Robot Base AMR Mini
+</details>
+
+<details>
+<summary>QRB Robot Base AMR Mini</summary>
+
 ```bash
 ros2 launch qrb_ros_sim_gazebo gazebo_robot_base_mini.launch.py
 ```
-##### QRB Mobile Manipulator Robot
+</details>
+
+<details>
+<summary>QRB Mobile Manipulator Robot</summary>
+
 1. launch
 ```bash
 ros2 launch qrb_ros_sim_gazebo gazebo_mobile_manipulator.launch.py
@@ -82,9 +136,7 @@ source install/local_setup.sh
 ros2 launch qrb_ros_sim_gazebo gazebo_mobile_manipulator_load_controller.launch.py
 ```
 </details>
- 
-
-<br>
+</details>
 
 You can get more details from [here](https://quic-qrb-ros.github.io/main/index.html).
 
