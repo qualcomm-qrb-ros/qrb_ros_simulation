@@ -8,5 +8,5 @@ docker_tag="latest"
 
 docker run -it --rm \
   --name ${docker_name}_container \
-  -p 222:22 \
+  --network host \
 	${docker_name}:${docker_tag}
