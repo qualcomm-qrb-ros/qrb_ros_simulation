@@ -56,7 +56,7 @@ chmod +x scripts/docker_build.sh
 chmod +x scripts/docker_run.sh
 ./scripts/docker_run.sh
 ```
-3. Copy the qrb_ros_simulation project to the docker container
+3. In a separate terminal, copy the qrb_ros_simulation project to the docker container
 ```bash
 docker cp ~/qrb_ros_simulation_ws qrb_ros_simulation_container:/root/qrb_ros_simulation_ws
 ```
