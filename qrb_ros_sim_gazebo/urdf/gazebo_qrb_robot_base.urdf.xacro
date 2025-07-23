@@ -2,26 +2,26 @@
 <!-- Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
 SPDX-License-Identifier: BSD-3-Clause-Clear -->
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="$(arg robot_name)">
-  <xacro:arg name="robot_base_ns" default=""/>
-  <xacro:property name="robot_base_ns_slash" value="${'$(arg robot_base_ns)/' if '$(arg robot_base_ns)' != '' else ''}" />
   <!-- Robot base -->
   <xacro:include filename="$(find qrb_ros_sim_description)/urdf/qrb_robot_base/qrb_robot_base.urdf" />
-  <xacro:qrb_robot_base ns="$(arg robot_base_ns)"/>
+  <xacro:qrb_robot_base ns=""/>
 
   <!-- Gazebo Sensors -->
   <!-- Laser -->
   <xacro:arg name="enable_laser" default="false"/>
-  <xacro:if value="$(arg enable_laser)" >
+  <xacro:arg name="laser_config" default=""/>
+  <xacro:if value="${'$(arg enable_laser)' if '$(arg laser_config)' != '' else 'false'}">
     <xacro:include filename="$(find qrb_ros_sim_gazebo)/urdf/xacro/gazebo_lidar.xacro" />
-    <xacro:gazebo_lidar ns="$(arg robot_base_ns)" reference_link="${robot_base_ns_slash}laser"
-      laser_params_yaml_path="$(find qrb_ros_sim_gazebo)/config/params/qrb_robot_base_laser_params.yaml"/>
+    <xacro:gazebo_lidar ns="" reference_link="laser"
+      laser_params_yaml_path="$(arg laser_config)"/>
   </xacro:if>
   <!-- IMU -->
   <xacro:arg name="enable_imu" default="false"/>
-  <xacro:if value="$(arg enable_imu)" >
+  <xacro:arg name="imu_config" default=""/>
+  <xacro:if value="${'$(arg enable_imu)' if '$(arg imu_config)' != '' else 'false'}">
     <xacro:include filename="$(find qrb_ros_sim_gazebo)/urdf/xacro/gazebo_imu.xacro" />
-    <xacro:gazebo_imu ns="$(arg robot_base_ns)" reference_link="${robot_base_ns_slash}base_imu_link"
-      imu_params_yaml_path="$(find qrb_ros_sim_gazebo)/config/params/imu_params.yaml"/>
+    <xacro:gazebo_imu ns="" reference_link="base_imu_link"
+      imu_params_yaml_path="$(arg imu_config)"/>
   </xacro:if>
 
   <!-- Gazebo Plugins -->
@@ -30,10 +30,10 @@ SPDX-License-Identifier: BSD-3-Clause-Clear -->
   <xacro:property name="radius_multiplier" value="1.0"/>
   <xacro:property name="odom_update_rate" value="50"/>
   <xacro:include filename="$(find qrb_ros_sim_gazebo)/urdf/xacro/gazebo_qrb_robot_base_diff_drive.xacro" />
-  <xacro:qrb_robot_base_diff_drive ns="$(arg robot_base_ns)" wheel_separation="${wheel_separation}" separation_multiplier="${separation_multiplier}"
+  <xacro:qrb_robot_base_diff_drive ns="" wheel_separation="${wheel_separation}" separation_multiplier="${separation_multiplier}"
       wheel_radius="${wheel_radius}" radius_multiplier="${radius_multiplier}" update_rate="${odom_update_rate}"/>
   <!-- gz-sim-joint-state-publisher-system controller -->
   <xacro:include filename="$(find qrb_ros_sim_gazebo)/urdf/xacro/gazebo_qrb_robot_base_joint_state_pub.xacro" />
-  <xacro:qrb_robot_base_joint_state_pub ns="$(arg robot_base_ns)"/>
+  <xacro:qrb_robot_base_joint_state_pub ns=""/>
 </robot>
 

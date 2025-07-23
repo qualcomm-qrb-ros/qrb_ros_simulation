@@ -1,37 +1,43 @@
+# This config file is used by ros2_control
 /**/controller_manager:
   ros__parameters:
-    hand_controller:
-      type: joint_trajectory_controller/JointTrajectoryController
-    joint_state_broadcaster:
-      type: joint_state_broadcaster/JointStateBroadcaster
+    update_rate: 100  # Hz
+
     rm_group_controller:
       type: joint_trajectory_controller/JointTrajectoryController
-    update_rate: 30
-/**/hand_controller:
-  ros__parameters:
-    allow_nonzero_velocity_at_trajectory_end: false
-    command_interfaces:
-    - position
-    joints:
-    - rml_63/joint01
-    - rml_63/joint11
-    - rml_63/joint02
-    - rml_63/joint22
-    state_interfaces:
-    - position
-    - velocity
+    
+    hand_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
 /**/rm_group_controller:
   ros__parameters:
-    allow_nonzero_velocity_at_trajectory_end: false
-    command_interfaces:
-    - position
     joints:
-    - rml_63/joint1
-    - rml_63/joint2
-    - rml_63/joint3
-    - rml_63/joint4
-    - rml_63/joint5
-    - rml_63/joint6
+      - joint1
+      - joint2
+      - joint3
+      - joint4
+      - joint5
+      - joint6
+    command_interfaces:
+      - position
     state_interfaces:
-    - position
-    - velocity
+      - position
+      - velocity
+    allow_nonzero_velocity_at_trajectory_end: false
+
+/**/hand_controller:
+  ros__parameters:
+    joints:
+      - joint01
+      - joint11
+      - joint02
+      - joint22
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+    allow_nonzero_velocity_at_trajectory_end: false

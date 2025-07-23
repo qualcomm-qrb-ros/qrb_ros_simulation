@@ -5,31 +5,32 @@ import yaml
 import xacro
 from launch import LaunchDescription
 from launch.actions import RegisterEventHandler
+from launch.actions import DeclareLaunchArgument
+from launch.actions import OpaqueFunction
 from launch_ros.actions import Node
-from launch_ros.substitutions import FindPackageShare
+from launch.substitutions import LaunchConfiguration
+from ament_index_python.packages import get_package_share_directory
 from launch.event_handlers import OnProcessExit
 
 def generate_launch_description():
     robot_gazebo_pkg = 'qrb_ros_sim_gazebo'
-    gz_pkg_share = FindPackageShare(package=robot_gazebo_pkg).find(robot_gazebo_pkg)
-    nodes = []
-    launch_config_path = os.path.join(gz_pkg_share,'config','rml_63_gripper_launch_config.yaml')
-    with open(launch_config_path, 'r') as f:
-        config = yaml.safe_load(f)
-        robot_group_args = config.get('robot_group_args', {})
-        for robot_config in robot_group_args:
-            nodes.extend(generate_robot_nodes(robot_config['arm_ns']))
+    gz_pkg_share = get_package_share_directory(robot_gazebo_pkg)
 
-    ld = LaunchDescription([
-        *nodes,
+    launch_args = [
+        DeclareLaunchArgument('namespace', default_value='')
+    ]
+
+    return LaunchDescription(launch_args + [
+        OpaqueFunction(function=generate_robot_nodes)
     ])
-    return ld
 
-def generate_robot_nodes(arm_ns):
+def generate_robot_nodes(context):
+    namespace = LaunchConfiguration('namespace').perform(context),
+
     load_joint_state_controller = Node(
         package='controller_manager',
         executable='spawner',
-        namespace=arm_ns,
+        namespace=namespace,
         arguments=[
             'joint_state_broadcaster',
             ],
@@ -38,7 +39,7 @@ def generate_robot_nodes(arm_ns):
     load_joint_trajectory_controller = Node(
         package='controller_manager',
         executable='spawner',
-        namespace=arm_ns,
+        namespace=namespace,
         arguments=[
             'rm_group_controller',
             ],
@@ -46,7 +47,7 @@ def generate_robot_nodes(arm_ns):
     load_gripper_controller = Node(
         package='controller_manager',
         executable='spawner',
-        namespace=arm_ns,
+        namespace=namespace,
         arguments=[
             'hand_controller',
             ],

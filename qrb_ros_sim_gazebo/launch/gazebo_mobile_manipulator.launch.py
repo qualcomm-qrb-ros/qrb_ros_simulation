@@ -5,193 +5,207 @@ import yaml
 import xacro
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription
-from launch.actions import RegisterEventHandler
-from launch.event_handlers import OnProcessExit
+from launch.actions import DeclareLaunchArgument
+from launch.actions import OpaqueFunction
 from launch_ros.actions import Node
-from launch.substitutions import PathJoinSubstitution
-from launch_ros.substitutions import FindPackageShare
+from launch.substitutions import LaunchConfiguration
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from ament_index_python.packages import get_package_share_directory
 
 def generate_launch_description():
     robot_gazebo_pkg = 'qrb_ros_sim_gazebo'
-    world_pkg = 'qrb_ros_sim_description'
+    default_laser_config = os.path.join(
+        get_package_share_directory(robot_gazebo_pkg), 'config', 'params', 'qrb_robot_base_laser_params.yaml')
+    default_imu_config = os.path.join(
+        get_package_share_directory(robot_gazebo_pkg), 'config', 'params', 'imu_params.yaml')
+    default_rgb_camera_config = os.path.join(
+        get_package_share_directory(robot_gazebo_pkg), 'config', 'params', 'rgb_camera_params.yaml')
+    default_depth_camera_config = os.path.join(
+        get_package_share_directory(robot_gazebo_pkg), 'config', 'params', 'depth_camera_params.yaml')
 
-    gz_pkg_share = FindPackageShare(package=robot_gazebo_pkg).find(robot_gazebo_pkg) 
-    world_pkg_share = FindPackageShare(package=world_pkg).find(world_pkg) 
-    robot_model_path = os.path.join(gz_pkg_share,'urdf','gazebo_qrb_mobile_manipulator_robot.urdf.xacro')
-    
-    nodes = []
-    launch_config_path = os.path.join(gz_pkg_share,'config','qrb_mobile_manipulator_launch_config.yaml')
-    ros2_controller_yaml_path = os.path.join(gz_pkg_share,'config','params','ros2_controllers.yaml')
-    with open(launch_config_path, 'r') as f:
-        config = yaml.safe_load(f)
-        world_file = f'{config['world_model']}.sdf'
-        robot_group_args = config.get('robot_group_args', {})
-        for robot_config in robot_group_args:
-            nodes.extend(generate_robot_nodes(robot_config, robot_model_path, ros2_controller_yaml_path))
+    launch_args = [
+        DeclareLaunchArgument('launch_config_file', default_value=''),
+        DeclareLaunchArgument('world_model', default_value='warehouse'),
+        DeclareLaunchArgument('robot_entity_name', default_value='qrb_amr_mini_robot'),
+        DeclareLaunchArgument('namespace', default_value=''),
+        DeclareLaunchArgument('enable_laser', default_value='true'),
+        DeclareLaunchArgument('laser_config_file', default_value=default_laser_config),
+        DeclareLaunchArgument('enable_imu', default_value='true'),
+        DeclareLaunchArgument('imu_config_file', default_value=default_imu_config),
+        DeclareLaunchArgument('enable_rgb_camera', default_value='true'),
+        DeclareLaunchArgument('rgb_camera_config_file', default_value=default_rgb_camera_config),
+        DeclareLaunchArgument('enable_depth_camera', default_value='true'),
+        DeclareLaunchArgument('depth_camera_config_file', default_value=default_depth_camera_config),
+        DeclareLaunchArgument('initial_x', default_value='0.0'),
+        DeclareLaunchArgument('initial_y', default_value='0.0'),
+        DeclareLaunchArgument('initial_z', default_value='0.0'),
+        DeclareLaunchArgument('initial_roll', default_value='0.0'),
+        DeclareLaunchArgument('initial_pitch', default_value='0.0'),
+        DeclareLaunchArgument('initial_yaw', default_value='0.0'),
+    ]
 
-    # launch the gazebo and load world model
-    load_world_model = IncludeLaunchDescription(
-            PythonLaunchDescriptionSource([os.path.join(
-                get_package_share_directory('ros_gz_sim'), 'launch'), '/gz_sim.launch.py']),
-            launch_arguments=[
-                ('gz_args', [os.path.join(world_pkg_share,'worlds',f'{world_file}'), ' -v 1'])
-        ]
-    )
-
-    # Clock bridge
-    clock_bridge = Node(
-        package='ros_gz_bridge',
-        executable='parameter_bridge',
-        arguments=['/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock'],
-        output='screen'
-    )
-
-    ld = LaunchDescription([
-        load_world_model,
-        *nodes,
-        clock_bridge,
+    return LaunchDescription(launch_args + [
+        OpaqueFunction(function=launch_setup)
     ])
-    return ld
 
-def strip_ns_str(ns_str):
-    return '/' + ns_str.strip('/')
+def launch_setup(context):
+    config = {
+        'launch_config_file': LaunchConfiguration('launch_config_file').perform(context),
+        'world_model': LaunchConfiguration('world_model').perform(context),
+        'robot_entity_name': LaunchConfiguration('robot_entity_name').perform(context),
+        'namespace': LaunchConfiguration('namespace').perform(context),
+        'enable_laser': LaunchConfiguration('enable_laser').perform(context),
+        'laser_config_file': LaunchConfiguration('laser_config_file').perform(context),
+        'enable_imu': LaunchConfiguration('enable_imu').perform(context),
+        'imu_config_file': LaunchConfiguration('imu_config_file').perform(context),
+        'enable_rgb_camera': LaunchConfiguration('enable_rgb_camera').perform(context),
+        'rgb_camera_config_file': LaunchConfiguration('rgb_camera_config_file').perform(context),
+        'enable_depth_camera': LaunchConfiguration('enable_depth_camera').perform(context),
+        'depth_camera_config_file': LaunchConfiguration('depth_camera_config_file').perform(context),
+        'initial_x': LaunchConfiguration('initial_x').perform(context),
+        'initial_y': LaunchConfiguration('initial_y').perform(context),
+        'initial_z': LaunchConfiguration('initial_z').perform(context),
+        'initial_roll': LaunchConfiguration('initial_roll').perform(context),
+        'initial_pitch': LaunchConfiguration('initial_pitch').perform(context),
+        'initial_yaw': LaunchConfiguration('initial_yaw').perform(context),
+    }
 
-def process_ros2_control_yaml(arm_ns, yaml_path):
-    # Add namespace for joints and generate new {arm_ns}_ros2_controller.yaml file
-    original_filename = os.path.basename(yaml_path)
-    new_filename = f"{arm_ns}_{original_filename}"
-    new_yaml_path = os.path.join(os.path.dirname(yaml_path), new_filename)
+    if config['launch_config_file']:
+        with open(config['launch_config_file'], 'r') as f:
+            yaml_config = yaml.safe_load(f)
+            for key in config:
+                if key in yaml_config:
+                    config[key] = yaml_config[key]
 
-    with open(yaml_path, 'r') as f:
-        config = yaml.safe_load(f)
-    for controller in config.values():
-        params = controller.get('ros__parameters', {})
-        if 'joints' in params:
-            params['joints'] = [f"{arm_ns}/{joint}" for joint in params['joints']]
-    # save new {arm_ns}_ros2_controller.yaml file
-    with open(new_yaml_path, 'w') as f:
-        yaml.dump(config, f, default_flow_style=False)
+    gz_pkg_share = get_package_share_directory('qrb_ros_sim_gazebo')
+    robot_model_path = os.path.join(gz_pkg_share, 'urdf', 'gazebo_qrb_mobile_manipulator_robot.urdf.xacro')
 
-def generate_robot_nodes(robot_config, robot_model_path, ros2_controller_yaml_path):
-    robot_name = robot_config['robot_name']
-    robot_base_ns = robot_config['robot_base_ns']
-    arm_ns = robot_config['arm_ns']
-    if arm_ns != '':
-        process_ros2_control_yaml(arm_ns, ros2_controller_yaml_path)
-    # Publish robot state
-    enable_laser = robot_config['enable_laser']
-    enable_imu = robot_config['enable_imu']
-    enable_rgb_camera = robot_config['enable_rgb_camera']
-    enable_depth_camera = robot_config['enable_depth_camera']
+    # Launch the gazebo and load world model
+    load_world_model = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([
+            os.path.join(get_package_share_directory('ros_gz_sim'), 'launch', 'gz_sim.launch.py')
+        ]),
+        launch_arguments={
+            'gz_args': [os.path.join(gz_pkg_share, 'worlds', f'{config["world_model"]}.sdf') + ' -v 1']
+        }.items()
+    )
+
+    robot_launch = generate_robot_launch(config, robot_model_path)
+
+    return [load_world_model, *robot_launch]
+
+def generate_robot_launch(config, robot_model_path):
     doc = xacro.process_file(
         robot_model_path,
         mappings={
-            'robot_name': robot_name,
-            'robot_base_ns': robot_base_ns,
-            'arm_ns': arm_ns,
-            'enable_laser': enable_laser,
-            'enable_imu': enable_imu,
-            'enable_rgb_camera': enable_rgb_camera,
-            'enable_depth_camera': enable_depth_camera,
-            }
+            'robot_name': config['robot_entity_name'],
+            'topic_ns': config['namespace'],
+            'enable_laser': config['enable_laser'],
+            'laser_config': config['laser_config_file'],
+            'enable_imu': config['enable_imu'],
+            'imu_config': config['imu_config_file'],
+            'enable_rgb_camera': config['enable_rgb_camera'],
+            'rgb_camera_config': config['rgb_camera_config_file'],
+            'enable_depth_camera': config['enable_depth_camera'],
+            'depth_camera_config': config['depth_camera_config_file'],
+        }
     )
 
     # After starting the robot_state_publisher node, it will publish the robot_description topic,
     # which contains the content of the URDF model file. It will also subscribe to the /joint_states
     # topic to get joint data, and then publish the tf and tf_static topics.
-    node_robot_state_publisher = Node(
+    robot_state_publisher_node = Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
         parameters=[{"use_sim_time": True}, {'robot_description': doc.toxml()}],
-        namespace=robot_base_ns,
+        namespace=config['namespace'],
         output='screen'
-    )
-    node_arm_state_publisher = Node(
-        package='robot_state_publisher',
-        executable='robot_state_publisher',
-        parameters=[{"use_sim_time": True}, {'robot_description': doc.toxml()}],
-        namespace=robot_base_ns,
-        output='screen',
-        remappings=[
-            (strip_ns_str(f"/{robot_base_ns}/joint_states"), strip_ns_str(f"/{arm_ns}/joint_states"))
-        ],
     )
 
     # Create robot model in the gazebo world
-    x = robot_config['initial_x']
-    y = robot_config['initial_y']
-    z = robot_config['initial_z']
-    roll = robot_config['initial_roll']
-    pitch = robot_config['initial_pitch']
-    yaw = robot_config['initial_yaw']
-    gz_spawn_entity = Node(
+    spawn_robot_entity = Node(
         package='ros_gz_sim',
         executable='create',
         output='screen',
-        namespace=robot_base_ns,
-        arguments=['-entity', robot_name, 
-                    '-topic', 'robot_description',
-                    '-x', x, '-y', y, '-z', z,
-                    '-R', roll, '-P', pitch, '-Y', yaw],
+        namespace=config['namespace'],
+        arguments=[
+            '-entity', config['robot_entity_name'],
+            '-topic', 'robot_description',
+            '-x', config['initial_x'],
+            '-y', config['initial_y'],
+            '-z', config['initial_z'],
+            '-R', config['initial_roll'],
+            '-P', config['initial_pitch'],
+            '-Y', config['initial_yaw']
+        ],
     )
 
-    # Bridge
-    bridge_configs = [
-        {   # depth camera
+    # Ros-Gazebo bridge
+    ros_gz_bridge_configs = []
+    ## Lidar
+    if config['enable_laser'].lower() == 'true':
+        ros_gz_bridge_configs.append(
+            {'args': ['scan@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan']}
+        )
+    ## IMU
+    if config['enable_imu'].lower() == 'true':
+        ros_gz_bridge_configs.append(
+            {'args': ['imu@sensor_msgs/msg/Imu[gz.msgs.IMU']}
+        )
+    ## RGB camera
+    if config['enable_rgb_camera'].lower() == 'true':
+        ros_gz_bridge_configs.append(
+            {'args': [
+                'camera/color/image_raw@sensor_msgs/msg/Image@gz.msgs.Image',
+                'camera/color/camera_info@sensor_msgs/msg/CameraInfo@gz.msgs.CameraInfo'
+            ]}
+        )
+    ## Depth camera
+    if config['enable_depth_camera'].lower() == 'true':
+        ros_gz_bridge_configs.append({
             'args': [
-                f'{arm_ns}/camera/depth/points@sensor_msgs/msg/PointCloud2@ignition.msgs.PointCloudPacked',
-                f'{arm_ns}/camera/depth/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo']
-        },
-        {   # RGB camera
-            'args': [
-                f'{arm_ns}/camera/image_raw@sensor_msgs/msg/Image@ignition.msgs.Image',
-                f'{arm_ns}/camera/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo']
-        },
-        {   # lidar
-            'args': [f'{robot_base_ns}/scan@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan']
-        },
-        {   # IMU
-            'args': [f'{robot_base_ns}/imu@sensor_msgs/msg/Imu[gz.msgs.IMU']
-        },
-        {   # differential driver
-            'args': [
-                f'{robot_base_ns}/odom@nav_msgs/msg/Odometry[gz.msgs.Odometry',
-                f'{robot_base_ns}/cmd_vel@geometry_msgs/msg/Twist]gz.msgs.Twist']
-        },
-        {   # robot state
-            'args': [
-                f'{robot_base_ns}/joint_states@sensor_msgs/msg/JointState[gz.msgs.Model',
-                '/tf@tf2_msgs/msg/TFMessage[gz.msgs.Pose_V']
-        }
-    ]
-    bridges = []
-    for config in bridge_configs:
-        bridges.append(
+                'camera/depth/points@sensor_msgs/msg/PointCloud2@gz.msgs.PointCloudPacked',
+                'camera/depth@sensor_msgs/msg/Image@gz.msgs.Image',
+                'camera/camera_info@sensor_msgs/msg/CameraInfo@gz.msgs.CameraInfo'
+            ],
+            'remappings': [
+                ('camera/depth','camera/depth/image_raw'),
+                ('camera/camera_info','camera/depth/camera_info')
+            ]
+        })
+    ## Differential driver
+    ros_gz_bridge_configs.append(
+        {'args': [
+            'odom@nav_msgs/msg/Odometry[gz.msgs.Odometry',
+            'cmd_vel@geometry_msgs/msg/Twist]gz.msgs.Twist'
+        ]}
+    )
+    ## Robot state
+    ros_gz_bridge_configs.append(
+        {'args': [
+            'joint_states@sensor_msgs/msg/JointState[gz.msgs.Model',
+            '/tf@tf2_msgs/msg/TFMessage[gz.msgs.Pose_V'
+        ]}
+    )
+    ## Clock
+    ros_gz_bridge_configs.append(
+        {'args': ['/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock']}
+    )
+    ros_gz_bridges = []
+    for bridge_config in ros_gz_bridge_configs:
+        ros_gz_bridges.append(
             Node(
                 package='ros_gz_bridge',
                 executable='parameter_bridge',
-                arguments=config['args'],
+                arguments=bridge_config['args'],
+                namespace=config['namespace'],
+                **({'remappings': bridge_config['remappings']} if 'remappings' in bridge_config else {}),
                 output='screen'
             )
         )
 
-    pub_world_odom_tf = Node(
-        package="tf2_ros",
-        executable="static_transform_publisher",
-        name="static_tf_world_to_odom",
-        arguments=[ 
-            "--frame-id", "world",
-            "--child-frame-id", f'{robot_base_ns}/odom'.strip('/')
-        ],
-        output="screen"
-    )
-
     return [
-        node_robot_state_publisher,
-        node_arm_state_publisher,
-        gz_spawn_entity,
-        *bridges,
-        pub_world_odom_tf,
+        robot_state_publisher_node,
+        spawn_robot_entity,
+        *ros_gz_bridges,
     ]

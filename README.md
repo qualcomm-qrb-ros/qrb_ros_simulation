@@ -133,7 +133,7 @@ ros2 launch qrb_ros_sim_gazebo gazebo_mobile_manipulator.launch.py
 ```bash
 cd ~/qrb_ros_simulation_ws
 source install/local_setup.sh
-ros2 launch qrb_ros_sim_gazebo gazebo_mobile_manipulator_load_controller.launch.py
+ros2 launch qrb_ros_sim_gazebo gazebo_rml_63_gripper_load_controller.launch.py
 ```
 </details>
 </details>

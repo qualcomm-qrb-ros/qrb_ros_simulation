@@ -1,16 +1,26 @@
-# config.yaml
+# Name of the Gazebo world model to load (without .sdf extension)
 world_model: "warehouse"
-robot_group_args:
-  - robot_name: "qrb_mobile_manipulator_robot"      # name of robot entity 
-    robot_base_ns: "qrb_robot_base"                 # namespace of robot base model
-    arm_ns: "rml_63"                                # namespace of robot arm model
-    enable_laser: "true"                           # enable/Disable lidar sensor in simulator
-    enable_imu: "true"                             # enable/Disable IMU sensor in simulator
-    enable_rgb_camera: "true"                      # enable/Disable RGB camera sensor in simulator
-    enable_depth_camera: "true"                    # enable/Disable depth camera sensor in simulator
-    initial_x: "0.0"                                # robot model's initial position in the world
-    initial_y: "0.0"
-    initial_z: "0.0"
-    initial_roll: "0.0"
-    initial_pitch: "0.0"
-    initial_yaw: "0.0"
+# Name of the robot entity in the simulation environment
+robot_entity_name: "qrb_mobile_manipulator_robot"
+# ROS namespace
+namespace: ""
+# Enable/disable LiDAR sensor in the simulated robot
+enable_laser: "true"
+# Enable/disable Inertial Measurement Unit (IMU) sensor in the simulated robot
+enable_imu: "true"
+# Enable/disable RGB camera sensor in the simulated robot
+enable_rgb_camera: "true"
+# Enable/disable depth camera sensor in the simulated robot
+enable_depth_camera: "true"
+# Initial X position (meters) of the robot in the simulated world coordinate system
+initial_x: "0.0"
+# Initial Y position (meters) of the robot in the simulated world coordinate system
+initial_y: "0.0"
+# Initial Z position (meters) of the robot in the simulated world coordinate system
+initial_z: "0.0"
+# Initial roll orientation (radians) of the robot around the X-axis
+initial_roll: "0.0"
+# Initial pitch orientation (radians) of the robot around the Y-axis
+initial_pitch: "0.0"
+# Initial yaw orientation (radians) of the robot around the Z-axis
+initial_yaw: "0.0"
