@@ -1,0 +1,2601 @@
+<?xml version='1.0' encoding='ASCII'?>
+
+<!--
+THIRD-PARTY MODEL ATTRIBUTION NOTICE
+
+This SDF file uses third-party 3D models from Gazebo Fuel under the Creative Commons Attribution 4.0 International license (CC BY 4.0):
+
+  https://creativecommons.org/licenses/by/4.0/
+
+List of included models licensed under CC BY 4.0:
+
+  Model Name         : Author        : Source URL
+  ——————————————————————————————————————————————————————————————————————————————————————————————————————
+  Office Desk        : OpenRobotics  : https://fuel.gazebosim.org/1.0/OpenRobotics/models/Office%20Desk
+  Office Chair       : OpenRobotics  : https://fuel.gazebosim.org/1.0/OpenRobotics/models/Office%20Chair
+  OfficeChairGrey    : OpenRobotics  : https://fuel.gazebosim.org/1.0/OpenRobotics/models/OfficeChairGrey
+  MaleVisitorSit     : OpenRobotics  : https://fuel.gazebosim.org/1.0/OpenRobotics/models/MaleVisitorSit
+  FemaleVisitorSit   : OpenRobotics  : https://fuel.gazebosim.org/1.0/OpenRobotics/models/FemaleVisitorSit
+  Sofa               : OpenRobotics  : https://fuel.gazebosim.org/1.0/OpenRobotics/models/Sofa
+  WhiteCabinet       : OpenRobotics  : https://fuel.gazebosim.org/1.0/OpenRobotics/models/WhiteCabinet
+  Coke               : OpenRobotics  : https://fuel.gazebosim.org/1.0/OpenRobotics/models/Coke
+  VisitorKidSit      : OpenRobotics  : https://fuel.gazebosim.org/1.0/OpenRobotics/models/VisitorKidSit
+  MonitorAndKeyboard : OpenRobotics  : https://fuel.gazebosim.org/1.0/OpenRobotics/models/MonitorAndKeyboard
+
+Attribution is provided above as required by the license.
+If any of these models are modified (e.g. geometry, texture), please indicate the changes here.
+
+If you use or redistribute this SDF file, please retain this attribution notice.
+-->
+
+<sdf version='1.9'>
+  <world name='office'>
+    <physics name='default_physics' type='ode'>
+      <max_step_size>0.0025</max_step_size>
+      <real_time_factor>1</real_time_factor>
+    </physics>
+
+    <!-- gz plugin set -->
+    <plugin name='gz::sim::systems::Physics' filename='gz-sim-physics-system' />
+    <plugin name='gz::sim::systems::UserCommands' filename='gz-sim-user-commands-system' />
+    <plugin name='gz::sim::systems::SceneBroadcaster' filename='gz-sim-scene-broadcaster-system' />
+    <plugin name='gz::sim::systems::Imu' filename='gz-sim-imu-system' />
+    <plugin name='gz::sim::systems::Sensors' filename='gz-sim-sensors-system'>
+      <render_engine>ogre2</render_engine>
+    </plugin>
+    <scene>
+      <ambient>1 1 1 1</ambient>
+      <background>0.3 0.7 0.9 1</background>
+      <shadows>0</shadows>
+      <grid>1</grid>
+    </scene>
+
+    <!-- ground set -->
+    <model name='ground_plane'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <cast_shadows>0</cast_shadows>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+          <material>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.5 0.5 0.5 1</diffuse>
+            <specular>0.1 0.1 0.1 1</specular>
+          </material>
+        </visual>
+      </link>
+      <pose>0 0 0 0 0 0</pose>
+    </model>
+
+    <light type="directional" name="directional_light">
+      <cast_shadows>true</cast_shadows>
+      <pose>0 0 10 0 0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <attenuation>
+          <range>20</range>
+          <constant>0.9</constant>
+          <linear>0.01</linear>
+          <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+
+    <!-- office wall set -->
+    <model name='office_wall'>
+      <pose>0.2046 4.41336 0 0 0 0</pose>
+      <!-- office around wall -->
+      <link name='Wall_Around_1'>
+        <collision name='Wall_Around_1_Collision'>
+          <geometry>
+            <box>
+              <size>5.5 0.15 2.5</size>
+            </box>
+          </geometry>
+          <pose>0 0 1.25 0 0 0</pose>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode />
+            </contact>
+            <bounce />
+            <friction>
+              <torsional>
+                <ode />
+              </torsional>
+              <ode />
+            </friction>
+          </surface>
+        </collision>
+        <visual name='Wall_Around_1_Visual'>
+          <pose>0 0 1.25 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>5.5 0.15 2.5</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/White</name>
+            </script>
+            <ambient>0.435294 0.796078 0.67451 1</ambient>
+          </material>
+          <meta>
+            <layer>0</layer>
+          </meta>
+        </visual>
+        <pose>4.925 -7.6 0 0 0 0</pose>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <link name='Wall_Around_2'>
+        <collision name='Wall_Around_2_Collision'>
+          <geometry>
+            <box>
+              <size>3.25 0.15 2.5</size>
+            </box>
+          </geometry>
+          <pose>0 0 1.25 0 0 0</pose>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode />
+            </contact>
+            <bounce />
+            <friction>
+              <torsional>
+                <ode />
+              </torsional>
+              <ode />
+            </friction>
+          </surface>
+        </collision>
+        <visual name='Wall_Around_2_Visual'>
+          <pose>0 0 1.25 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>3.25 0.15 2.5</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/White</name>
+            </script>
+            <ambient>0.435294 0.796078 0.67451 1</ambient>
+          </material>
+          <meta>
+            <layer>0</layer>
+          </meta>
+        </visual>
+        <pose>9.15 -7.6 0 0 0 0</pose>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <link name='Wall_Around_3'>
+        <collision name='Wall_Around_3_Collision'>
+          <geometry>
+            <box>
+              <size>10.5 0.15 2.5</size>
+            </box>
+          </geometry>
+          <pose>0 0 1.25 0 0 0</pose>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode />
+            </contact>
+            <bounce />
+            <friction>
+              <torsional>
+                <ode />
+              </torsional>
+              <ode />
+            </friction>
+          </surface>
+        </collision>
+        <visual name='Wall_Around_3_Visual'>
+          <pose>0 0 1.25 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>10.5 0.15 2.5</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/White</name>
+            </script>
+            <ambient>0.435294 0.796078 0.67451 1</ambient>
+          </material>
+          <meta>
+            <layer>0</layer>
+          </meta>
+        </visual>
+        <pose>10.7 -2.425 0 0 0 1.5708</pose>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <link name='Wall_Around_4'>
+        <collision name='Wall_Around_4_Collision'>
+          <geometry>
+            <box>
+              <size>5 0.15 2.5</size>
+            </box>
+          </geometry>
+          <pose>0 0 1.25 0 0 0</pose>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode />
+            </contact>
+            <bounce />
+            <friction>
+              <torsional>
+                <ode />
+              </torsional>
+              <ode />
+            </friction>
+          </surface>
+        </collision>
+        <visual name='Wall_Around_4_Visual'>
+          <pose>0 0 1.25 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>5 0.15 2.5</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/White</name>
+            </script>
+            <ambient>0.760784 0.662745 0.627451 1</ambient>
+          </material>
+          <meta>
+            <layer>0</layer>
+          </meta>
+        </visual>
+        <pose>10.7 5.175 0 0 0 1.5708</pose>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <link name='Wall_Around_5'>
+        <collision name='Wall_Around_5_Collision'>
+          <geometry>
+            <box>
+              <size>7 0.15 2.5</size>
+            </box>
+          </geometry>
+          <pose>0 0 1.25 0 0 0</pose>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode />
+            </contact>
+            <bounce />
+            <friction>
+              <torsional>
+                <ode />
+              </torsional>
+              <ode />
+            </friction>
+          </surface>
+        </collision>
+        <visual name='Wall_Around_5_Visual'>
+          <pose>0 0 1.25 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>7 0.15 2.5</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/White</name>
+            </script>
+            <ambient>1 1 1 1</ambient>
+          </material>
+          <meta>
+            <layer>0</layer>
+          </meta>
+        </visual>
+        <pose>7.275 7.6 0 0 0 3.14159</pose>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <link name='Wall_Around_6'>
+        <collision name='Wall_Around_6_Collision'>
+          <geometry>
+            <box>
+              <size>2 0.15 2.5</size>
+            </box>
+          </geometry>
+          <pose>0 0 1.25 0 0 0</pose>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode />
+            </contact>
+            <bounce />
+            <friction>
+              <torsional>
+                <ode />
+              </torsional>
+              <ode />
+            </friction>
+          </surface>
+        </collision>
+        <visual name='Wall_Around_6_Visual'>
+          <pose>0 0 1.25 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>2 0.15 2.5</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/White</name>
+            </script>
+            <ambient>0.760784 0.662745 0.627451 1</ambient>
+          </material>
+          <meta>
+            <layer>0</layer>
+          </meta>
+        </visual>
+        <pose>2.925 7.6 0 0 0 3.14159</pose>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <link name='Wall_Around_7'>
+        <collision name='Wall_Around_7_Collision'>
+          <geometry>
+            <box>
+              <size>3.5 0.15 2.5</size>
+            </box>
+          </geometry>
+          <pose>0 0 1.25 0 0 0</pose>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode />
+            </contact>
+            <bounce />
+            <friction>
+              <torsional>
+                <ode />
+              </torsional>
+              <ode />
+            </friction>
+          </surface>
+        </collision>
+        <visual name='Wall_Around_7_Visual'>
+          <pose>0 0 1.25 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>3.5 0.15 2.5</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/White</name>
+            </script>
+            <ambient>0.760784 0.662745 0.627451 1</ambient>
+          </material>
+          <meta>
+            <layer>0</layer>
+          </meta>
+        </visual>
+        <pose>2 5.925 0 0 0 -1.5708</pose>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <link name='Wall_Around_8'>
+        <collision name='Wall_Around_8_Collision'>
+          <geometry>
+            <box>
+              <size>3 0.15 2.5</size>
+            </box>
+          </geometry>
+          <pose>0 0 1.25 0 0 0</pose>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode />
+            </contact>
+            <bounce />
+            <friction>
+              <torsional>
+                <ode />
+              </torsional>
+              <ode />
+            </friction>
+          </surface>
+        </collision>
+        <visual name='Wall_Around_8_Visual'>
+          <pose>0 0 1.25 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>3 0.15 2.5</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/White</name>
+            </script>
+            <ambient>0.760784 0.662745 0.627451 1</ambient>
+          </material>
+          <meta>
+            <layer>0</layer>
+          </meta>
+        </visual>
+        <pose>0.575 4.25 0 0 0 3.14159</pose>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <link name='Wall_Around_9'>
+        <collision name='Wall_Around_9_Collision'>
+          <geometry>
+            <box>
+              <size>2 0.15 2.5</size>
+            </box>
+          </geometry>
+          <pose>0 0 1.25 0 0 0</pose>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode />
+            </contact>
+            <bounce />
+            <friction>
+              <torsional>
+                <ode />
+              </torsional>
+              <ode />
+            </friction>
+          </surface>
+        </collision>
+        <visual name='Wall_Around_9_Visual'>
+          <pose>0 0 1.25 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>2 0.15 2.5</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/White</name>
+            </script>
+            <ambient>0.760784 0.662745 0.627451 1</ambient>
+          </material>
+          <meta>
+            <layer>0</layer>
+          </meta>
+        </visual>
+        <pose>-0.85 3.325 0 0 0 -1.5708</pose>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <link name='Wall_Around_10'>
+        <collision name='Wall_Around_10_Collision'>
+          <geometry>
+            <box>
+              <size>10 0.15 2.5</size>
+            </box>
+          </geometry>
+          <pose>0 0 1.25 0 0 0</pose>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode />
+            </contact>
+            <bounce />
+            <friction>
+              <torsional>
+                <ode />
+              </torsional>
+              <ode />
+            </friction>
+          </surface>
+        </collision>
+        <visual name='Wall_Around_10_Visual'>
+          <pose>0 0 1.25 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>10 0.15 2.5</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/White</name>
+            </script>
+            <ambient>0.760784 0.662745 0.627451 1</ambient>
+          </material>
+          <meta>
+            <layer>0</layer>
+          </meta>
+        </visual>
+        <pose>-5.775 2.4 0 0 0 3.14159</pose>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <link name='Wall_Around_11'>
+        <collision name='Wall_Around_11_Collision'>
+          <geometry>
+            <box>
+              <size>5.5 0.15 2.5</size>
+            </box>
+          </geometry>
+          <pose>0 0 1.25 0 0 0</pose>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode />
+            </contact>
+            <bounce />
+            <friction>
+              <torsional>
+                <ode />
+              </torsional>
+              <ode />
+            </friction>
+          </surface>
+        </collision>
+        <visual name='Wall_Around_11_Visual'>
+          <pose>0 0 1.25 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>5.5 0.15 2.5</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/White</name>
+            </script>
+            <ambient>0.760784 0.662745 0.627451 1</ambient>
+          </material>
+          <meta>
+            <layer>0</layer>
+          </meta>
+        </visual>
+        <pose>-10.7 -0.275 0 0 0 -1.5708</pose>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <link name='Wall_Around_12'>
+        <collision name='Wall_Around_12_Collision'>
+          <geometry>
+            <box>
+              <size>4.8 0.15 2.5</size>
+            </box>
+          </geometry>
+          <pose>0 0 1.25 0 0 0</pose>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode />
+            </contact>
+            <bounce />
+            <friction>
+              <torsional>
+                <ode />
+              </torsional>
+              <ode />
+            </friction>
+          </surface>
+        </collision>
+        <visual name='Wall_Around_12_Visual'>
+          <pose>0 0 1.25 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>4.8 0.15 2.5</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/White</name>
+            </script>
+            <ambient>1 0.764706 0.305882 1</ambient>
+          </material>
+          <meta>
+            <layer>0</layer>
+          </meta>
+        </visual>
+        <pose>-10.7 -5.275 0 0 0 -1.5708</pose>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <link name='Wall_Around_13'>
+        <collision name='Wall_Around_13_Collision'>
+          <geometry>
+            <box>
+              <size>10 0.15 2.5</size>
+            </box>
+          </geometry>
+          <pose>0 0 1.25 0 0 0</pose>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode />
+            </contact>
+            <bounce />
+            <friction>
+              <torsional>
+                <ode />
+              </torsional>
+              <ode />
+            </friction>
+          </surface>
+        </collision>
+        <visual name='Wall_Around_13_Visual'>
+          <pose>0 0 1.25 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>10 0.15 2.5</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/White</name>
+            </script>
+            <ambient>1 0.764706 0.305882 1</ambient>
+          </material>
+          <meta>
+            <layer>0</layer>
+          </meta>
+        </visual>
+        <pose>-5.775 -7.6 0 0 0 0</pose>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <link name='Wall_Around_14'>
+        <collision name='Wall_Around_14_Collision'>
+          <geometry>
+            <box>
+              <size>3.25 0.15 2.5</size>
+            </box>
+          </geometry>
+          <pose>0 0 1.25 0 0 0</pose>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode />
+            </contact>
+            <bounce />
+            <friction>
+              <torsional>
+                <ode />
+              </torsional>
+              <ode />
+            </friction>
+          </surface>
+        </collision>
+        <visual name='Wall_Around_14_Visual'>
+          <pose>0 0 1.25 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>3.25 0.15 2.5</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/White</name>
+            </script>
+            <ambient>0.435294 0.796078 0.67451 1</ambient>
+          </material>
+          <meta>
+            <layer>0</layer>
+          </meta>
+        </visual>
+        <pose>0.7 -7.6 0 0 0 0</pose>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+
+      <!-- work station wall -->
+      <link name='Wall_Station_1'>
+        <collision name='Wall_Station_1_Collision'>
+          <geometry>
+            <box>
+              <size>7.5 0.15 2.5</size>
+            </box>
+          </geometry>
+          <pose>0 0 1.25 0 0 0</pose>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode />
+            </contact>
+            <bounce />
+            <friction>
+              <torsional>
+                <ode />
+              </torsional>
+              <ode />
+            </friction>
+          </surface>
+        </collision>
+        <visual name='Wall_Station_1_Visual'>
+          <pose>0 0 1.25 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>7.5 0.15 2.5</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/White</name>
+            </script>
+          </material>
+          <meta>
+            <layer>0</layer>
+          </meta>
+        </visual>
+        <pose>-0.85 -3.925 0 0 0 1.5708</pose>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <link name='Wall_Station_2'>
+        <collision name='Wall_Station_2_Collision'>
+          <geometry>
+            <box>
+              <size>7.5 0.12 1.8</size>
+            </box>
+          </geometry>
+          <pose>0 0 0.9 0 0 0</pose>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode />
+            </contact>
+            <bounce />
+            <friction>
+              <torsional>
+                <ode />
+              </torsional>
+              <ode />
+            </friction>
+          </surface>
+        </collision>
+        <visual name='Wall_Station_2_Visual'>
+          <pose>0 0 0.9 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>7.5 0.12 1.8</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.6 0.4 0.2 1</ambient>
+            <diffuse>0.6 0.4 0.2 1</diffuse>
+          </material>
+          <meta>
+            <layer>0</layer>
+          </meta>
+        </visual>
+        <pose>2.25 -3.925 0 0 0 1.5708</pose>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <link name='Wall_Station_3'>
+        <collision name='Wall_Station_3_Collision'>
+          <geometry>
+            <box>
+              <size>7.5 0.12 1.8</size>
+            </box>
+          </geometry>
+          <pose>0 0 0.9 0 0 0</pose>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode />
+            </contact>
+            <bounce />
+            <friction>
+              <torsional>
+                <ode />
+              </torsional>
+              <ode />
+            </friction>
+          </surface>
+        </collision>
+        <visual name='Wall_Station_3_Visual'>
+          <pose>0 0 0.9 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>7.5 0.12 1.8 </size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.6 0.4 0.2 1</ambient>
+            <diffuse>0.6 0.4 0.2 1</diffuse>
+          </material>
+          <meta>
+            <layer>0</layer>
+          </meta>
+        </visual>
+        <pose>7.6 -3.925 0 0 0 1.5708</pose>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <link name='Wall_Station_4'>
+        <collision name='Wall_Station_4_Collision'>
+          <geometry>
+            <box>
+              <size>2 0.12 1.8</size>
+            </box>
+          </geometry>
+          <pose>0 0 0.9 0 0 0</pose>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode />
+            </contact>
+            <bounce />
+            <friction>
+              <torsional>
+                <ode />
+              </torsional>
+              <ode />
+            </friction>
+          </surface>
+        </collision>
+        <visual name='Wall_Station_4_Visual'>
+          <pose>0 0 0.9 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>2 0.12 1.8</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.6 0.4 0.2 1</ambient>
+            <diffuse>0.6 0.4 0.2 1</diffuse>
+          </material>
+          <meta>
+            <layer>0</layer>
+          </meta>
+        </visual>
+        <pose>0.075 -0.25 0 0 0 0</pose>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <link name='Wall_Station_5'>
+        <collision name='Wall_Station_5_Collision'>
+          <geometry>
+            <box>
+              <size>2 0.12 1.8</size>
+            </box>
+          </geometry>
+          <pose>0 0 0.9 0 0 0</pose>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode />
+            </contact>
+            <bounce />
+            <friction>
+              <torsional>
+                <ode />
+              </torsional>
+              <ode />
+            </friction>
+          </surface>
+        </collision>
+        <visual name='Wall_Station_5_Visual'>
+          <pose>0 0 0.9 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>2 0.12 1.8</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.6 0.4 0.2 1</ambient>
+            <diffuse>0.6 0.4 0.2 1</diffuse>
+          </material>
+          <meta>
+            <layer>0</layer>
+          </meta>
+        </visual>
+        <pose>0.075 -2.95 0 0 0 0</pose>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <link name='Wall_Station_6'>
+        <collision name='Wall_Station_6_Collision'>
+          <geometry>
+            <box>
+              <size>2 0.12 1.8</size>
+            </box>
+          </geometry>
+          <pose>0 0 0.9 0 0 0</pose>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode />
+            </contact>
+            <bounce />
+            <friction>
+              <torsional>
+                <ode />
+              </torsional>
+              <ode />
+            </friction>
+          </surface>
+        </collision>
+        <visual name='Wall_Station_6_Visual'>
+          <pose>0 0 0.9 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>2 0.12 1.8</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.6 0.4 0.2 1</ambient>
+            <diffuse>0.6 0.4 0.2 1</diffuse>
+          </material>
+          <meta>
+            <layer>0</layer>
+          </meta>
+        </visual>
+        <pose>0.146673 -5.32593 0 0 0 0</pose>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <link name='Wall_Station_7'>
+        <collision name='Wall_Station_7_Collision'>
+          <geometry>
+            <box>
+              <size>2 0.12 1.8</size>
+            </box>
+          </geometry>
+          <pose>0 0 0.9 0 0 0</pose>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode />
+            </contact>
+            <bounce />
+            <friction>
+              <torsional>
+                <ode />
+              </torsional>
+              <ode />
+            </friction>
+          </surface>
+        </collision>
+        <visual name='Wall_Station_7_Visual'>
+          <pose>0 0 0.9 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>2 0.12 1.8</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.6 0.4 0.2 1</ambient>
+            <diffuse>0.6 0.4 0.2 1</diffuse>
+          </material>
+          <meta>
+            <layer>0</layer>
+          </meta>
+        </visual>
+        <pose>3.175 -0.25 0 0 0 0</pose>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <link name='Wall_Station_8'>
+        <collision name='Wall_Station_8_Collision'>
+          <geometry>
+            <box>
+              <size>2 0.12 1.8</size>
+            </box>
+          </geometry>
+          <pose>0 0 0.9 0 0 0</pose>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode />
+            </contact>
+            <bounce />
+            <friction>
+              <torsional>
+                <ode />
+              </torsional>
+              <ode />
+            </friction>
+          </surface>
+        </collision>
+        <visual name='Wall_Station_8_Visual'>
+          <pose>0 0 0.9 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>2 0.12 1.8</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.6 0.4 0.2 1</ambient>
+            <diffuse>0.6 0.4 0.2 1</diffuse>
+          </material>
+          <meta>
+            <layer>0</layer>
+          </meta>
+        </visual>
+        <pose>3.17073 -2.92995 0 0 0 0</pose>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <link name='Wall_Station_9'>
+        <collision name='Wall_Station_9_Collision'>
+          <geometry>
+            <box>
+              <size>2 0.12 1.8</size>
+            </box>
+          </geometry>
+          <pose>0 0 0.9 0 0 0</pose>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode />
+            </contact>
+            <bounce />
+            <friction>
+              <torsional>
+                <ode />
+              </torsional>
+              <ode />
+            </friction>
+          </surface>
+        </collision>
+        <visual name='Wall_Station_9_Visual'>
+          <pose>0 0 0.9 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>2 0.12 1.8</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.6 0.4 0.2 1</ambient>
+            <diffuse>0.6 0.4 0.2 1</diffuse>
+          </material>
+          <meta>
+            <layer>0</layer>
+          </meta>
+        </visual>
+        <pose>3.19399 -5.30267 0 0 0 0</pose>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <link name='Wall_Station_10'>
+        <collision name='Wall_Station_10_Collision'>
+          <geometry>
+            <box>
+              <size>2 0.12 1.8</size>
+            </box>
+          </geometry>
+          <pose>0 0 0.9 0 0 0</pose>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode />
+            </contact>
+            <bounce />
+            <friction>
+              <torsional>
+                <ode />
+              </torsional>
+              <ode />
+            </friction>
+          </surface>
+        </collision>
+        <visual name='Wall_Station_10_Visual'>
+          <pose>0 0 0.9 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>2 0.12 1.8</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.6 0.4 0.2 1</ambient>
+            <diffuse>0.6 0.4 0.2 1</diffuse>
+          </material>
+          <meta>
+            <layer>0</layer>
+          </meta>
+        </visual>
+        <pose>6.675 -0.25 0 0 0 3.14159</pose>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <link name='Wall_Station_11'>
+        <collision name='Wall_Station_11_Collision'>
+          <geometry>
+            <box>
+              <size>2 0.15 1.8</size>
+            </box>
+          </geometry>
+          <pose>0 0 0.9 0 0 0</pose>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode />
+            </contact>
+            <bounce />
+            <friction>
+              <torsional>
+                <ode />
+              </torsional>
+              <ode />
+            </friction>
+          </surface>
+        </collision>
+        <visual name='Wall_Station_11_Visual'>
+          <pose>0 0 0.9 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>2 0.15 1.8</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.6 0.4 0.2 1</ambient>
+            <diffuse>0.6 0.4 0.2 1</diffuse>
+          </material>
+          <meta>
+            <layer>0</layer>
+          </meta>
+        </visual>
+        <pose>6.60442 -2.88309 0 0 0 3.14159</pose>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <link name='Wall_Station_12'>
+        <collision name='Wall_Station_12_Collision'>
+          <geometry>
+            <box>
+              <size>2 0.12 1.8</size>
+            </box>
+          </geometry>
+          <pose>0 0 0.9 0 0 0</pose>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode />
+            </contact>
+            <bounce />
+            <friction>
+              <torsional>
+                <ode />
+              </torsional>
+              <ode />
+            </friction>
+          </surface>
+        </collision>
+        <visual name='Wall_Station_12_Visual'>
+          <pose>0 0 0.9 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>2 0.12 1.8</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.6 0.4 0.2 1</ambient>
+            <diffuse>0.6 0.4 0.2 1</diffuse>
+          </material>
+          <meta>
+            <layer>0</layer>
+          </meta>
+        </visual>
+        <pose>6.58058 -5.30866 0 0 0 3.14159</pose>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <link name='Wall_Station_13'>
+        <collision name='Wall_Station_13_Collision'>
+          <geometry>
+            <box>
+              <size>2 0.12 1.8</size>
+            </box>
+          </geometry>
+          <pose>0 0 0.9 0 0 0</pose>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode />
+            </contact>
+            <bounce />
+            <friction>
+              <torsional>
+                <ode />
+              </torsional>
+              <ode />
+            </friction>
+          </surface>
+        </collision>
+        <visual name='Wall_Station_13_Visual'>
+          <pose>0 0 0.9 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>2 0.12 1.8</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.6 0.4 0.2 1</ambient>
+            <diffuse>0.6 0.4 0.2 1</diffuse>
+          </material>
+          <meta>
+            <layer>0</layer>
+          </meta>
+        </visual>
+        <pose>8.525 -0.25 0 0 0 0</pose>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <link name='Wall_Station_14'>
+        <collision name='Wall_Station_14_Collision'>
+          <geometry>
+            <box>
+              <size>2 0.12 1.8</size>
+            </box>
+          </geometry>
+          <pose>0 0 0.9 0 0 0</pose>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode />
+            </contact>
+            <bounce />
+            <friction>
+              <torsional>
+                <ode />
+              </torsional>
+              <ode />
+            </friction>
+          </surface>
+        </collision>
+        <visual name='Wall_Station_14_Visual'>
+          <pose>0 0 0.9 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>2 0.12 1.8</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.6 0.4 0.2 1</ambient>
+            <diffuse>0.6 0.4 0.2 1</diffuse>
+          </material>
+          <meta>
+            <layer>0</layer>
+          </meta>
+        </visual>
+        <pose>8.45441 -2.88309 0 0 0 0</pose>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <link name='Wall_Station_15'>
+        <collision name='Wall_Station_15_Collision'>
+          <geometry>
+            <box>
+              <size>2 0.12 1.8</size>
+            </box>
+          </geometry>
+          <pose>0 0 0.9 0 0 0</pose>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode />
+            </contact>
+            <bounce />
+            <friction>
+              <torsional>
+                <ode />
+              </torsional>
+              <ode />
+            </friction>
+          </surface>
+        </collision>
+        <visual name='Wall_Station_15_Visual'>
+          <pose>0 0 0.9 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>2 0.12 1.8</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.6 0.4 0.2 1</ambient>
+            <diffuse>0.6 0.4 0.2 1</diffuse>
+          </material>
+          <meta>
+            <layer>0</layer>
+          </meta>
+        </visual>
+        <pose>8.43058 -5.30866 0 0 0 0</pose>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+
+      <!-- office wall -->
+      <link name='Wall_Office_1'>
+        <pose>9.025 2.75 0 0 0 3.14159</pose>
+        <visual name='Wall_Office_1_Visual_0'>
+          <pose>-0.575969 0 1.25 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>2.34806 0.15 2.5</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.9 0.9 0.9 1</ambient>
+            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <specular>0.1 0.1 0.1 1</specular>
+          </material>
+          <meta>
+            <layer>0</layer>
+          </meta>
+        </visual>
+        <collision name='Wall_Office_1_Collision_0'>
+          <geometry>
+            <box>
+              <size>2.34806 0.15 2.5</size>
+            </box>
+          </geometry>
+          <pose>-0.575969 0 1.25 0 0 0</pose>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode />
+            </contact>
+            <bounce />
+            <friction>
+              <torsional>
+                <ode />
+              </torsional>
+              <ode />
+            </friction>
+          </surface>
+        </collision>
+        <visual name='Wall_Office_1_Visual_1'>
+          <pose>1.62403 0 1.25 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.251937 0.15 2.5</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/CeilingTiled</name>
+            </script>
+            <ambient>1 1 1 1</ambient>
+          </material>
+          <meta>
+            <layer>0</layer>
+          </meta>
+        </visual>
+        <collision name='Wall_Office_1_Collision_1'>
+          <geometry>
+            <box>
+              <size>0.251937 0.15 2.5</size>
+            </box>
+          </geometry>
+          <pose>1.62403 0 1.25 0 0 0</pose>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode />
+            </contact>
+            <bounce />
+            <friction>
+              <torsional>
+                <ode />
+              </torsional>
+              <ode />
+            </friction>
+          </surface>
+        </collision>
+        <visual name='Wall_Office_1_Visual_2'>
+          <pose>1.04806 0 2.25 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.9 0.15 0.5</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/CeilingTiled</name>
+            </script>
+            <ambient>1 1 1 1</ambient>
+          </material>
+          <meta>
+            <layer>0</layer>
+          </meta>
+        </visual>
+        <collision name='Wall_Office_1_Collision_2'>
+          <geometry>
+            <box>
+              <size>0.9 0.15 0.5</size>
+            </box>
+          </geometry>
+          <pose>1.04806 0 2.25 0 0 0</pose>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode />
+            </contact>
+            <bounce />
+            <friction>
+              <torsional>
+                <ode />
+              </torsional>
+              <ode />
+            </friction>
+          </surface>
+        </collision>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <link name='Wall_Ofiice_2'>
+        <collision name='Wall_Ofiice_2_Collision'>
+          <geometry>
+            <box>
+              <size>5 0.15 2.5</size>
+            </box>
+          </geometry>
+          <pose>0 0 1.25 0 0 0</pose>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode />
+            </contact>
+            <bounce />
+            <friction>
+              <torsional>
+                <ode />
+              </torsional>
+              <ode />
+            </friction>
+          </surface>
+        </collision>
+        <visual name='Wall_Ofiice_2_Visual'>
+          <pose>0 0 1.25 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>5 0.15 2.5</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/White</name>
+            </script>
+            <ambient>1 1 1 1</ambient>
+          </material>
+          <meta>
+            <layer>0</layer>
+          </meta>
+        </visual>
+        <pose>7.35 5.175 0 0 0 1.5708</pose>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <link name='Wall_Ofiice_3'>
+        <pose>5.6 2.75 0 0 0 0</pose>
+        <visual name='Wall_Ofiice_3_Visual_0'>
+          <pose>-1.72741 0 1.25 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.195188 0.15 2.5</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/CeilingTiled</name>
+            </script>
+            <ambient>1 1 1 1</ambient>
+          </material>
+          <meta>
+            <layer>0</layer>
+          </meta>
+        </visual>
+        <collision name='Wall_Ofiice_3_Collision_0'>
+          <geometry>
+            <box>
+              <size>0.195188 0.15 2.5</size>
+            </box>
+          </geometry>
+          <pose>-1.72741 0 1.25 0 0 0</pose>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode />
+            </contact>
+            <bounce />
+            <friction>
+              <torsional>
+                <ode />
+              </torsional>
+              <ode />
+            </friction>
+          </surface>
+        </collision>
+        <visual name='Wall_Ofiice_3_Visual_1'>
+          <pose>0.547594 0 1.25 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>2.55481 0.15 2.5</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.9 0.9 0.9 1</ambient>
+            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <specular>0.1 0.1 0.1 1</specular>
+          </material>
+          <meta>
+            <layer>0</layer>
+          </meta>
+        </visual>
+        <collision name='Wall_Ofiice_3_Collision_1'>
+          <geometry>
+            <box>
+              <size>2.55481 0.15 2.5</size>
+            </box>
+          </geometry>
+          <pose>0.547594 0 1.25 0 0 0</pose>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode />
+            </contact>
+            <bounce />
+            <friction>
+              <torsional>
+                <ode />
+              </torsional>
+              <ode />
+            </friction>
+          </surface>
+        </collision>
+        <visual name='Wall_Ofiice_3_Visual_2'>
+          <pose>-1.17981 0 2.25 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.9 0.15 0.5</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/CeilingTiled</name>
+            </script>
+            <ambient>1 1 1 1</ambient>
+          </material>
+          <meta>
+            <layer>0</layer>
+          </meta>
+        </visual>
+        <collision name='Wall_Ofiice_3_Collision_2'>
+          <geometry>
+            <box>
+              <size>0.9 0.15 0.5</size>
+            </box>
+          </geometry>
+          <pose>-1.17981 0 2.25 0 0 0</pose>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode />
+            </contact>
+            <bounce />
+            <friction>
+              <torsional>
+                <ode />
+              </torsional>
+              <ode />
+            </friction>
+          </surface>
+        </collision>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <link name='Wall_Ofiice_4'>
+        <collision name='Wall_Ofiice_4_Collision'>
+          <geometry>
+            <box>
+              <size>5 0.15 2.5</size>
+            </box>
+          </geometry>
+          <pose>0 0 1.25 0 0 0</pose>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode />
+            </contact>
+            <bounce />
+            <friction>
+              <torsional>
+                <ode />
+              </torsional>
+              <ode />
+            </friction>
+          </surface>
+        </collision>
+        <visual name='Wall_Ofiice_4_Visual'>
+          <pose>0 0 1.25 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>5 0.15 2.5</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/White</name>
+            </script>
+            <ambient>1 1 1 1</ambient>
+          </material>
+          <meta>
+            <layer>0</layer>
+          </meta>
+        </visual>
+        <pose>3.85 5.175 0 0 0 1.5708</pose>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+
+      <!-- pantry wall -->
+      <link name='Wall_Pantry'>
+        <pose>-5.775 -2.95 0 0 0 0</pose>
+        <visual name='Wall_Pantry_Visual_0'>
+          <pose>-4.90481 0 1.25 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.190383 0.15 2.5</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/White</name>
+            </script>
+            <ambient>1 0.764706 0.305882 1</ambient>
+          </material>
+          <meta>
+            <layer>0</layer>
+          </meta>
+        </visual>
+        <collision name='Wall_Pantry_Collision_0'>
+          <geometry>
+            <box>
+              <size>0.190383 0.15 2.5</size>
+            </box>
+          </geometry>
+          <pose>-4.90481 0 1.25 0 0 0</pose>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode />
+            </contact>
+            <bounce />
+            <friction>
+              <torsional>
+                <ode />
+              </torsional>
+              <ode />
+            </friction>
+          </surface>
+        </collision>
+        <visual name='Wall_Pantry_Visual_1'>
+          <pose>0.545191 0 1.25 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>8.90962 0.15 2.5</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/White</name>
+            </script>
+            <ambient>1 0.764706 0.305882 1</ambient>
+          </material>
+          <meta>
+            <layer>0</layer>
+          </meta>
+        </visual>
+        <collision name='Wall_Pantry_Collision_1'>
+          <geometry>
+            <box>
+              <size>8.90962 0.15 2.5</size>
+            </box>
+          </geometry>
+          <pose>0.545191 0 1.25 0 0 0</pose>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode />
+            </contact>
+            <bounce />
+            <friction>
+              <torsional>
+                <ode />
+              </torsional>
+              <ode />
+            </friction>
+          </surface>
+        </collision>
+        <visual name='Wall_Pantry_Visual_2'>
+          <pose>-4.35962 0 2.25 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.9 0.15 0.5</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/White</name>
+            </script>
+            <ambient>1 0.764706 0.305882 1</ambient>
+          </material>
+          <meta>
+            <layer>0</layer>
+          </meta>
+        </visual>
+        <collision name='Wall_Pantry_Collision_2'>
+          <geometry>
+            <box>
+              <size>0.9 0.15 0.5</size>
+            </box>
+          </geometry>
+          <pose>-4.35962 0 2.25 0 0 0</pose>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode />
+            </contact>
+            <bounce />
+            <friction>
+              <torsional>
+                <ode />
+              </torsional>
+              <ode />
+            </friction>
+          </surface>
+        </collision>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <static>1</static>
+    </model>
+
+    <!-- pantry set -->
+    <model name='pantry_sofa'>
+      <!-- Visitor -->
+      <model name='FemaleVisitorSit'>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/FemaleVisitorSit
+          </uri>
+          <pose>-2.46052 0.523061 0 0 0 0</pose>
+        </include>
+      </model>
+      <model name='MaleVisitorSit'>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/MaleVisitorSit
+          </uri>
+          <pose>1.82276 0.573173 0 0 0 0</pose>
+        </include>
+      </model>
+      <!-- Cafe table groups -->
+      <model name='Cafe table 1'>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/spotlightss/models/Cafe table
+          </uri>
+          <pose>1.82301 -0.367154 0 0 0 0</pose>
+        </include>
+      </model>
+      <model name='Cafe table 2'>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/spotlightss/models/Cafe table
+          </uri>
+          <pose>3.17424 -0.367154 0 0 0 0</pose>
+        </include>
+      </model>
+      <model name='Cafe table 3'>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/spotlightss/models/Cafe table
+          </uri>
+          <pose>-1.12087 -0.367154 0 0 0 0</pose>
+        </include>
+      </model>
+      <model name='Cafe table 4'>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/spotlightss/models/Cafe table
+          </uri>
+          <pose>-2.49982 -0.367154 0 0 0 0</pose>
+        </include>
+      </model>
+      <!-- Cup groups -->
+      <model name='cup1'>
+        <include>
+          <uri> https://fuel.gazebosim.org/1.0/OpenRobotics/models/Plastic Cup </uri>
+          <pose>1.43821 -0.367543 0.779455 0 0 0</pose>
+        </include>
+      </model>
+      <model name='cup2'>
+        <include>
+          <uri> https://fuel.gazebosim.org/1.0/OpenRobotics/models/Plastic Cup </uri>
+          <pose>-2.16924 -0.260165 0.779455 0 0 0</pose>
+        </include>
+      </model>
+      <!-- Cafe sofa groups -->
+      <model name='sofa 1'>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/Sofa
+	  </uri>
+	  <static>1</static>
+          <pose>2.33346 0.856403 0 0 0 -1.5708</pose>
+        </include>
+      </model>
+      <model name='sofa 2'>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/Sofa
+          </uri>
+          <pose>-1.98763 0.856403 0 0 0 -1.5708</pose>
+	  <static>1</static>
+        </include>
+      </model>
+      <static>1</static>
+      <pose>-5.04139 3.70799 0 0 0 0</pose>
+    </model>
+    <model name='cabinet group'>
+      <!-- Cabinet groups -->
+      <model name='cabinet 1'>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/WhiteCabinet
+          </uri>
+          <pose>3.47242 0.000398 0 0 0 -3.13807</pose>
+        </include>
+      </model>
+      <model name='cabinet 2'>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/WhiteCabinet
+          </uri>
+          <pose>2.57373 0.000398 0 0 0 -3.13807</pose>
+        </include>
+      </model>
+      <model name='cabinet 3'>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/WhiteCabinet
+          </uri>
+          <pose>1.66586 0.000398 0 0 0 -3.13807</pose>
+        </include>
+      </model>
+      <model name='cabinet 4'>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/WhiteCabinet
+          </uri>
+          <pose>0.773602 0.000398 0 0 0 -3.13807</pose>
+        </include>
+      </model>
+      <model name='cabinet 5'>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/WhiteCabinet
+          </uri>
+          <pose>-0.124663 0.000398 0 0 0 -3.13807</pose>
+        </include>
+      </model>
+      <model name='cabinet 6'>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/WhiteCabinet
+          </uri>
+          <pose>-1.02092 0.000398 0 0 0 -3.13807</pose>
+        </include>
+      </model>
+      <model name='cabinet 7'>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/WhiteCabinet
+          </uri>
+          <pose>-1.91809 0.000398 0 0 0 -3.13807</pose>
+        </include>
+      </model>
+      <model name='cabinet 8'>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/WhiteCabinet
+          </uri>
+          <pose>-2.81299 0.000398 0 0 0 -3.13807</pose>
+        </include>
+      </model>
+      <model name='cabinet 9'>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/WhiteCabinet
+          </uri>
+          <pose>-3.71274 0.000398 0 0 0 -3.13807</pose>
+        </include>
+      </model>
+      <pose>-4.63 1.73 0 0 0 0</pose>
+    </model>
+    <model name='coffee cup group'>
+      <model name='coffee cup 1'>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/spotlightss/models/ACE_Coffee_Mug_Kristen_16_oz_cup
+          </uri>
+          <pose>-2.78 0.13 0 0 0 0</pose>
+        </include>
+      </model>
+      <model name='coffee cup 2'>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/spotlightss/models/ACE_Coffee_Mug_Kristen_16_oz_cup
+          </uri>
+          <pose>1.62 0.13 0 0 0 0</pose>
+        </include>
+      </model>
+      <model name='coffee cup 3'>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/spotlightss/models/ACE_Coffee_Mug_Kristen_16_oz_cup
+          </uri>
+          <pose>2.59 0.13 0 0 0 0</pose>
+        </include>
+      </model>
+      <pose>-4.57 1.60 1.08 0 0 0</pose>
+    </model>
+    <model name='coke group'>
+      <model name='coke 1'>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/Coke
+          </uri>
+          <pose>0.379531 -0.022006 0 0 0 0</pose>
+        </include>
+      </model>
+      <model name='coke 2'>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/Coke
+          </uri>
+          <pose>0.091506 -0.022005 0 0 0 0</pose>
+        </include>
+      </model>
+      <model name='coke 3'>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/Coke
+          </uri>
+          <pose>0.228817 -0.022005 0 0 0 0</pose>
+        </include>
+      </model>
+      <model name='coke 4'>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/Coke
+          </uri>
+          <pose>-0.053148 -0.022005 0 0 0 0</pose>
+        </include>
+      </model>
+      <model name='coke 5'>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/Coke
+          </uri>
+          <pose>-0.189945 -0.022005 0 0 0 0</pose>
+        </include>
+      </model>
+      <pose>-4.57 1.80 1.08 0 0 0</pose>
+    </model>
+
+    <!-- meeting room set -->
+    <model name="meeting room chairs group 1">
+      <model name="meeting room chairs 1">
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/OfficeChairGrey
+          </uri>
+          <pose>-1.96118 -0.026407 0 0 0 0</pose>
+        </include>
+      </model>
+      <model name="meeting room chairs 2">
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/OfficeChairGrey
+          </uri>
+          <pose>-0.697703 -0.026407 0 0 0 0</pose>
+        </include>
+      </model>
+      <model name="meeting room chairs 3">
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/OfficeChairGrey
+          </uri>
+          <pose>0.679083 -0.026407 0 0 0 0</pose>
+        </include>
+      </model>
+      <model name="meeting room chairs 4">
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/OfficeChairGrey
+          </uri>
+          <pose>1.9798 -0.026407 0 0 0 0</pose>
+        </include>
+      </model>
+      <pose>-5.80 0.22 0 0 0 0</pose>
+    </model>
+    <model name="meeting room chairs group 2">
+      <model name="meeting room chairs 5">
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/OfficeChairGrey
+          </uri>
+          <pose>-1.96118 -0.026407 0 0 0 -3.1416</pose>
+        </include>
+      </model>
+      <model name="meeting room chairs 6">
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/OfficeChairGrey
+          </uri>
+          <pose>-0.697703 -0.026407 0 0 0 -3.1416</pose>
+        </include>
+      </model>
+      <model name="meeting room chairs 7">
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/OfficeChairGrey
+          </uri>
+          <pose>0.679083 -0.026407 0 0 0 -3.1416</pose>
+        </include>
+      </model>
+      <model name="meeting room chairs 8">
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/OfficeChairGrey
+          </uri>
+          <pose>1.9798 -0.026407 0 0 0 -3.1416</pose>
+        </include>
+      </model>
+      <pose>-5.80 -2.06 0 0 0 0</pose>
+    </model>
+    <model name="meeting room table group 1">
+      <model name="meeting room table 1">
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/spotlightss/models/Cafe table
+          </uri>
+          <pose>-2.296 0 0 0 0 0</pose>
+        </include>
+      </model>
+      <model name="meeting room table 2">
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/spotlightss/models/Cafe table
+          </uri>
+          <pose>-1.3776 0 0 0 0 0</pose>
+        </include>
+      </model>
+      <model name="meeting room table 3">
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/spotlightss/models/Cafe table
+          </uri>
+          <pose>-0.4592 0 0 0 0 0</pose>
+        </include>
+      </model>
+      <model name="meeting room table 4">
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/spotlightss/models/Cafe table
+          </uri>
+          <pose>0.4592 0 0 0 0 0</pose>
+        </include>
+      </model>
+      <model name="meeting room table 5">
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/spotlightss/models/Cafe table
+          </uri>
+          <pose>1.3776 0 0 0 0 0</pose>
+        </include>
+      </model>
+      <model name="meeting room table 6">
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/spotlightss/models/Cafe table
+          </uri>
+          <pose>2.296 0 0 0 0 0</pose>
+        </include>
+      </model>
+      <pose>-5.84 -1.31 0 0 0 0</pose>
+    </model>
+    <model name="meeting room table group 2">
+      <model name="meeting room table 7">
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/spotlightss/models/Cafe table
+          </uri>
+          <pose>-2.296 0 0 0 0 0</pose>
+        </include>
+      </model>
+      <model name="meeting room table 8">
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/spotlightss/models/Cafe table
+          </uri>
+          <pose>-1.3776 0 0 0 0 0</pose>
+        </include>
+      </model>
+      <model name="meeting room table 9">
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/spotlightss/models/Cafe table
+          </uri>
+          <pose>-0.4592 0 0 0 0 0</pose>
+        </include>
+      </model>
+      <model name="meeting room table 10">
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/spotlightss/models/Cafe table
+          </uri>
+          <pose>0.4592 0 0 0 0 0</pose>
+        </include>
+      </model>
+      <model name="meeting room table 11">
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/spotlightss/models/Cafe table
+          </uri>
+          <pose>1.3776 0 0 0 0 0</pose>
+        </include>
+      </model>
+      <model name="meeting room table 12">
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/spotlightss/models/Cafe table
+          </uri>
+          <pose>2.296 0 0 0 0 0</pose>
+        </include>
+      </model>
+      <pose>-5.84 -0.40 0 0 0 0</pose>
+    </model>
+
+    <!-- work station set -->
+    <model name='station site group 1'>
+      <model name='station site 1'>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/VisitorKidSit
+          </uri>
+          <pose>0 0 0.08 0 0 3.13807</pose>
+        </include>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/OfficeChairGrey
+          </uri>
+          <pose>0 0.13 0 0 0 3.13807</pose>
+        </include>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/FoodCourtTable1
+          </uri>
+          <pose>0 0.82 0 0 0 1.56935</pose>
+        </include>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/MonitorAndKeyboard
+          </uri>
+          <pose>0 1 0.73 0 0 1.56935</pose>
+        </include>
+        <pose>0 2.45 0 0 0 0</pose>
+      </model>
+      <model name='station site 2'>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/VisitorKidSit
+          </uri>
+          <pose>0 0 0.08 0 0 3.13807</pose>
+        </include>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/OfficeChairGrey
+          </uri>
+          <pose>0 0.13 0 0 0 3.13807</pose>
+        </include>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/FoodCourtTable1
+          </uri>
+          <pose>0 0.82 0 0 0 1.56935</pose>
+        </include>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/MonitorAndKeyboard
+          </uri>
+          <pose>0 1 0.73 0 0 1.56935</pose>
+        </include>
+        <pose>0 0 0 0 0 0</pose>
+      </model>
+      <model name='station site 3'>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/VisitorKidSit
+          </uri>
+          <pose>0 0 0.08 0 0 3.13807</pose>
+        </include>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/OfficeChairGrey
+          </uri>
+          <pose>0 0.13 0 0 0 3.13807</pose>
+        </include>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/FoodCourtTable1
+          </uri>
+          <pose>0 0.82 0 0 0 1.56935</pose>
+        </include>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/MonitorAndKeyboard
+          </uri>
+          <pose>0 1 0.73 0 0 1.56935</pose>
+        </include>
+        <pose>0 -2.37 0 0 0 0</pose>
+      </model>
+      <pose>0.32 -0.1 0 0 0 0</pose>
+    </model>
+    <model name='station site group 2'>
+      <model name='station site 4'>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/VisitorKidSit
+          </uri>
+          <pose>0 0 0.08 0 0 3.13807</pose>
+        </include>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/OfficeChairGrey
+          </uri>
+          <pose>0 0.13 0 0 0 3.13807</pose>
+        </include>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/FoodCourtTable1
+          </uri>
+          <pose>0 0.82 0 0 0 1.56935</pose>
+        </include>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/MonitorAndKeyboard
+          </uri>
+          <pose>0 1 0.73 0 0 1.56935</pose>
+        </include>
+        <pose>0 2.45 0 0 0 0</pose>
+      </model>
+      <model name='station site 5'>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/VisitorKidSit
+          </uri>
+          <pose>0 0 0.08 0 0 3.13807</pose>
+        </include>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/OfficeChairGrey
+          </uri>
+          <pose>0 0.13 0 0 0 3.13807</pose>
+        </include>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/FoodCourtTable1
+          </uri>
+          <pose>0 0.82 0 0 0 1.56935</pose>
+        </include>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/MonitorAndKeyboard
+          </uri>
+          <pose>0 1 0.73 0 0 1.56935</pose>
+        </include>
+        <pose>0 0 0 0 0 0</pose>
+      </model>
+      <model name='station site 6'>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/VisitorKidSit
+          </uri>
+          <pose>0 0 0.08 0 0 3.13807</pose>
+        </include>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/OfficeChairGrey
+          </uri>
+          <pose>0 0.13 0 0 0 3.13807</pose>
+        </include>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/FoodCourtTable1
+          </uri>
+          <pose>0 0.82 0 0 0 1.56935</pose>
+        </include>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/MonitorAndKeyboard
+          </uri>
+          <pose>0 1 0.73 0 0 1.56935</pose>
+        </include>
+        <pose>0 -2.37 0 0 0 0</pose>
+      </model>
+      <pose>3.48 -0.1 0 0 0 0</pose>
+    </model>
+    <model name='station site group 3'>
+      <model name='station site 7'>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/VisitorKidSit
+          </uri>
+          <pose>0 0 0.08 0 0 3.13807</pose>
+        </include>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/OfficeChairGrey
+          </uri>
+          <pose>0 0.13 0 0 0 3.13807</pose>
+        </include>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/FoodCourtTable1
+          </uri>
+          <pose>0 0.82 0 0 0 1.56935</pose>
+        </include>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/MonitorAndKeyboard
+          </uri>
+          <pose>0 1 0.73 0 0 1.56935</pose>
+        </include>
+        <pose>0 2.45 0 0 0 0</pose>
+      </model>
+      <model name='station site 8'>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/VisitorKidSit
+          </uri>
+          <pose>0 0 0.08 0 0 3.13807</pose>
+        </include>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/OfficeChairGrey
+          </uri>
+          <pose>0 0.13 0 0 0 3.13807</pose>
+        </include>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/FoodCourtTable1
+          </uri>
+          <pose>0 0.82 0 0 0 1.56935</pose>
+        </include>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/MonitorAndKeyboard
+          </uri>
+          <pose>0 1 0.73 0 0 1.56935</pose>
+        </include>
+        <pose>0 0 0 0 0 0</pose>
+      </model>
+      <model name='station site 9'>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/VisitorKidSit
+          </uri>
+          <pose>0 0 0.08 0 0 3.13807</pose>
+        </include>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/OfficeChairGrey
+          </uri>
+          <pose>0 0.13 0 0 0 3.13807</pose>
+        </include>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/FoodCourtTable1
+          </uri>
+          <pose>0 0.82 0 0 0 1.56935</pose>
+        </include>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/MonitorAndKeyboard
+          </uri>
+          <pose>0 1 0.73 0 0 1.56935</pose>
+        </include>
+        <pose>0 -2.37 0 0 0 0</pose>
+      </model>
+      <pose>6.97 -0.1 0 0 0 0</pose>
+    </model>
+    <model name='station site group 4'>
+      <model name='station site 10'>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/OfficeChairGrey
+          </uri>
+          <pose>0 0.13 0 0 0 3.13807</pose>
+        </include>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/FoodCourtTable1
+          </uri>
+          <pose>0 0.82 0 0 0 1.56935</pose>
+        </include>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/MonitorAndKeyboard
+          </uri>
+          <pose>0 1 0.73 0 0 1.56935</pose>
+        </include>
+        <pose>0 2.45 0 0 0 0</pose>
+      </model>
+      <model name='station site 11'>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/OfficeChairGrey
+          </uri>
+          <pose>0 0.13 0 0 0 3.13807</pose>
+        </include>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/FoodCourtTable1
+          </uri>
+          <pose>0 0.82 0 0 0 1.56935</pose>
+        </include>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/MonitorAndKeyboard
+          </uri>
+          <pose>0 1 0.73 0 0 1.56935</pose>
+        </include>
+        <pose>0 0 0 0 0 0</pose>
+      </model>
+      <model name='station site 12'>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/OfficeChairGrey
+          </uri>
+          <pose>0 0.13 0 0 0 3.13807</pose>
+        </include>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/FoodCourtTable1
+          </uri>
+          <pose>0 0.82 0 0 0 1.56935</pose>
+        </include>
+        <include>
+          <uri>
+            https://fuel.gazebosim.org/1.0/OpenRobotics/models/MonitorAndKeyboard
+          </uri>
+          <pose>0 1 0.73 0 0 1.56935</pose>
+        </include>
+        <pose>0 -2.37 0 0 0 0</pose>
+      </model>
+      <pose>8.69 -0.1 0 0 0 0</pose>
+    </model>
+
+    <!-- office set -->
+    <model name='office site 1'>
+      <include>
+        <uri>
+          https://fuel.gazebosim.org/1.0/OpenRobotics/models/Office Desk
+        </uri>
+        <pose>0.09 -0.84 -0.14 0 0 1.56935</pose>
+      </include>
+      <include>
+        <uri>
+          https://fuel.gazebosim.org/1.0/OpenRobotics/models/Office Chair
+        </uri>
+        <pose>0.05 0.18 0 0 0 3.13807</pose>
+      </include>
+      <include>
+        <uri>
+          https://fuel.gazebosim.org/1.0/OpenRobotics/models/MaleVisitorSit
+        </uri>
+        <pose>0 0 0.10 0 0 0</pose>
+      </include>
+      <pose>5.84 9.42 0 0 0 0</pose>
+    </model>
+    <model name='office site 2'>
+      <include>
+        <uri>
+          https://fuel.gazebosim.org/1.0/OpenRobotics/models/Office Desk
+        </uri>
+        <pose>0.09 -0.84 -0.14 0 0 1.56935</pose>
+      </include>
+      <include>
+        <uri>
+          https://fuel.gazebosim.org/1.0/OpenRobotics/models/Office Chair
+        </uri>
+        <pose>0.05 0.18 0 0 0 3.13807</pose>
+      </include>
+      <pose>9.34 9.42 0 0 0 0</pose>
+    </model>
+
+  </world>
+</sdf>
