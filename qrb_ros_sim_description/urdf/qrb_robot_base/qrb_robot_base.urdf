@@ -131,7 +131,6 @@
       <child link="${namespace}wheel_left"/>
       <parent link="${namespace}base_link"/>
       <axis xyz="0 1 0"/>
-      <dynamics damping="0.1" friction="0.1"/>
     </joint>
 
 
@@ -141,7 +140,6 @@
       <child link="${namespace}wheel_right"/>
       <parent link="${namespace}base_link"/>
       <axis xyz="0 1 0" />
-      <dynamics damping="0.1" friction="0.1"/>
     </joint>
 
     <link name="${namespace}caster_wheel_link1">
@@ -168,7 +166,6 @@
       <child link="${namespace}caster_wheel_link1" />
       <origin xyz="0.24 0.17 -${chassis_height+box_height/2-caster_wheel_radius}" />
       <axis xyz="1 1 1" />
-      <dynamics damping="0.01" friction="0.01"/>
     </joint>
 
     <link name="${namespace}caster_wheel_link2">
@@ -195,7 +192,6 @@
       <child link="${namespace}caster_wheel_link2" />
       <origin xyz="0.24 -0.17 -${chassis_height+box_height/2-caster_wheel_radius}" />
       <axis xyz="1 1 1" />
-      <dynamics damping="0.01" friction="0.01"/>
     </joint>
 
     <link name="${namespace}caster_wheel_link3">
@@ -222,7 +218,6 @@
       <child link="${namespace}caster_wheel_link3" />
       <origin xyz="-0.24 0.17 -${chassis_height+box_height/2-caster_wheel_radius}" />
       <axis xyz="1 1 1" />
-      <dynamics damping="0.01" friction="0.01"/>
     </joint>
 
     <link name="${namespace}caster_wheel_link4">
@@ -249,7 +244,6 @@
       <child link="${namespace}caster_wheel_link4" />
       <origin xyz="-0.24 -0.17 -${chassis_height+box_height/2-caster_wheel_radius}" />
       <axis xyz="1 1 1" />
-      <dynamics damping="0.01" friction="0.01"/>
     </joint>
 
     <link name="${namespace}base_imu_link">
@@ -263,5 +257,23 @@
       <parent link="${namespace}base_link"/>
       <child link="${namespace}base_imu_link"/>
     </joint>
+
+    <!-- Gazebo elements -->
+    <gazebo reference="${namespace}caster_wheel_link1">
+      <mu1>0</mu1>
+      <mu2>0</mu2>
+    </gazebo>
+    <gazebo reference="${namespace}caster_wheel_link2">
+      <mu1>0</mu1>
+      <mu2>0</mu2>
+    </gazebo>
+    <gazebo reference="${namespace}caster_wheel_link3">
+      <mu1>0</mu1>
+      <mu2>0</mu2>
+    </gazebo>
+    <gazebo reference="${namespace}caster_wheel_link4">
+      <mu1>0</mu1>
+      <mu2>0</mu2>
+    </gazebo>
   </xacro:macro>
 </robot>

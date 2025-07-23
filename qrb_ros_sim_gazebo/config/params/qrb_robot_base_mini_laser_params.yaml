@@ -1,10 +1,10 @@
 # laser parameters for qrb robot base mini
 sensor_name: "qrb_robot_base_lidar"
-update_rate: 20
+update_rate: 15
 horizontal:
-  samples: 1600
+  samples: 1800
   resolution: 1
-  min_angle: -3.14159
+  min_angle: -3.124139
   max_angle: 3.14159
 vertical:
   samples: 1
@@ -12,8 +12,8 @@ vertical:
   min_angle: 0
   max_angle: 0
 range:
-  min: 0.1
-  max: 20.0
+  min: 0.15
+  max: 25.0
   resolution: 0.01
 noise:
   type: "gaussian"

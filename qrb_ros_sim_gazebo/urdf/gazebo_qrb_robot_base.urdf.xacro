@@ -26,9 +26,9 @@ SPDX-License-Identifier: BSD-3-Clause-Clear -->
 
   <!-- Gazebo Plugins -->
   <!-- gz-sim-diff-drive-system controller -->
-  <xacro:property name="separation_multiplier" value="1.15"/>
+  <xacro:property name="separation_multiplier" value="1.1525"/>
   <xacro:property name="radius_multiplier" value="1.0"/>
-  <xacro:property name="odom_update_rate" value="30"/>
+  <xacro:property name="odom_update_rate" value="50"/>
   <xacro:include filename="$(find qrb_ros_sim_gazebo)/urdf/xacro/gazebo_qrb_robot_base_diff_drive.xacro" />
   <xacro:qrb_robot_base_diff_drive ns="$(arg robot_base_ns)" wheel_separation="${wheel_separation}" separation_multiplier="${separation_multiplier}"
       wheel_radius="${wheel_radius}" radius_multiplier="${radius_multiplier}" update_rate="${odom_update_rate}"/>

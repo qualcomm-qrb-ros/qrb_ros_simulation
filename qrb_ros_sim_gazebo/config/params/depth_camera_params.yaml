@@ -1,15 +1,8 @@
 # depth camera parameters
 sensor_name: "depth_camera"
-update_rate: 20
+update_rate: 15
 camera:
   horizontal_fov: 1.570796
-  lens:
-    intrinsics:
-      fx: 310
-      fy: 310
-      cx: 319.5
-      cy: 179.5
-      s: 0
   image:
     width: 640
     height: 360

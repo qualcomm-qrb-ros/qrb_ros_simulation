@@ -2,7 +2,7 @@
 world_model: "warehouse"
 robot_group_args:
   - robot_name: "qrb_amr_mini_robot"          # name of robot entity
-    robot_base_ns: "qrb_robot_base"           # namespace of robot base model
+    robot_base_ns: ""           # namespace of robot base model
     enable_laser: "true"                     # enable/Disable lidar sensor in simulator
     enable_imu: "true"                       # enable/Disable IMU sensor in simulator
     enable_rgb_camera: "true"                # enable/Disable RGB camera sensor in simulator

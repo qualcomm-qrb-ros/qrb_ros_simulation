@@ -102,8 +102,8 @@ def generate_robot_nodes(robot_config, robot_model_path):
                     '-R', roll, '-P', pitch, '-Y', yaw],
     )
 
-    # Bridge
-    bridge_configs = [
+    # Ros-Gazebo Bridge
+    ros_gz_bridge_configs = [
         {   # lidar
             'args': [f'{robot_base_ns}/scan@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan']
         },
@@ -121,9 +121,9 @@ def generate_robot_nodes(robot_config, robot_model_path):
                 '/tf@tf2_msgs/msg/TFMessage[gz.msgs.Pose_V']
         }
     ]
-    bridges = []
-    for config in bridge_configs:
-        bridges.append(
+    ros_gz_bridges = []
+    for config in ros_gz_bridge_configs:
+        ros_gz_bridges.append(
             Node(
                 package='ros_gz_bridge',
                 executable='parameter_bridge',
@@ -132,20 +132,8 @@ def generate_robot_nodes(robot_config, robot_model_path):
             )
         )
 
-    pub_world_odom_tf = Node(
-        package="tf2_ros",
-        executable="static_transform_publisher",
-        name="static_tf_world_to_odom",
-        arguments=[
-            "--frame-id", "world",
-            "--child-frame-id", f'{robot_base_ns}/odom'.strip('/')
-        ],
-        output="screen"
-    )
-
     return [
         node_robot_state_publisher,
         gz_spawn_entity,
-        *bridges,
-        pub_world_odom_tf,
+        *ros_gz_bridges,
     ]

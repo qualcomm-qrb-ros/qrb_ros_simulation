@@ -103,17 +103,12 @@ def generate_robot_nodes(robot_config, robot_model_path):
                     '-R', roll, '-P', pitch, '-Y', yaw],
     )
 
-    # Bridge
-    bridge_configs = [
-        {   # depth camera
-            'args': [
-                f'{robot_base_ns}/camera/depth/points@sensor_msgs/msg/PointCloud2@ignition.msgs.PointCloudPacked',
-                f'{robot_base_ns}/camera/depth/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo']
-        },
+    # Ros-Gazebo Bridge
+    ros_gz_bridge_configs = [
         {   # RGB camera
             'args': [
-                f'{robot_base_ns}/camera/image_raw@sensor_msgs/msg/Image@ignition.msgs.Image',
-                f'{robot_base_ns}/camera/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo']
+                f'{robot_base_ns}/camera/color/image_raw@sensor_msgs/msg/Image@gz.msgs.Image',
+                f'{robot_base_ns}/camera/color/camera_info@sensor_msgs/msg/CameraInfo@gz.msgs.CameraInfo']
         },
         {   # lidar
             'args': [f'{robot_base_ns}/scan@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan']
@@ -132,9 +127,9 @@ def generate_robot_nodes(robot_config, robot_model_path):
                 '/tf@tf2_msgs/msg/TFMessage[gz.msgs.Pose_V']
         }
     ]
-    bridges = []
-    for config in bridge_configs:
-        bridges.append(
+    ros_gz_bridges = []
+    for config in ros_gz_bridge_configs:
+        ros_gz_bridges.append(
             Node(
                 package='ros_gz_bridge',
                 executable='parameter_bridge',
@@ -143,20 +138,20 @@ def generate_robot_nodes(robot_config, robot_model_path):
             )
         )
 
-    pub_world_odom_tf = Node(
-        package="tf2_ros",
-        executable="static_transform_publisher",
-        name="static_tf_world_to_odom",
-        arguments=[
-            "--frame-id", "world",
-            "--child-frame-id", f'{robot_base_ns}/odom'
-        ],
-        output="screen"
-    )
+    remapping_ros_gz_bridges = Node(
+        package='ros_gz_bridge',
+            executable='parameter_bridge',
+            arguments=[
+                f'{robot_base_ns}/camera/depth/points@sensor_msgs/msg/PointCloud2@gz.msgs.PointCloudPacked',
+                f'{robot_base_ns}/camera/depth@sensor_msgs/msg/Image@gz.msgs.Image',
+                ],
+            output='screen',
+            remappings=[(f'{robot_base_ns}/camera/depth',f'{robot_base_ns}/camera/depth/image_raw')]
+        )
 
     return [
         node_robot_state_publisher,
         gz_spawn_entity,
-        *bridges,
-        pub_world_odom_tf,
+        *ros_gz_bridges,
+        remapping_ros_gz_bridges,
     ]
