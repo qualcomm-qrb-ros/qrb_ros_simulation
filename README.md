@@ -109,7 +109,7 @@ ros2 launch qrb_ros_sim_gazebo gazebo_rml_63_gripper_load_controller.launch.py
 <summary>QRB Robot Base AMR</summary>
 
 ```bash
-ros2 launch qrb_ros_sim_gazebo gazebo_robot_base.launch.py
+ros2 launch qrb_ros_sim_gazebo gazebo_robot_base.launch.py namespace:=qrb_robot_base
 ```
 </details>
 
@@ -117,7 +117,7 @@ ros2 launch qrb_ros_sim_gazebo gazebo_robot_base.launch.py
 <summary>QRB Robot Base AMR Mini</summary>
 
 ```bash
-ros2 launch qrb_ros_sim_gazebo gazebo_robot_base_mini.launch.py
+ros2 launch qrb_ros_sim_gazebo gazebo_robot_base_mini.launch.py namespace:=qrb_robot_base
 ```
 </details>
 
