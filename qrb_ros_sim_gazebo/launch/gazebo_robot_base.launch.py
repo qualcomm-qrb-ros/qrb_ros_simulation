@@ -28,6 +28,7 @@ def generate_launch_description():
         DeclareLaunchArgument('laser_config_file', default_value=default_laser_config),
         DeclareLaunchArgument('enable_imu', default_value='true'),
         DeclareLaunchArgument('imu_config_file', default_value=default_imu_config),
+        DeclareLaunchArgument('enable_odom', default_value='true'),
         DeclareLaunchArgument('initial_x', default_value='0.0'),
         DeclareLaunchArgument('initial_y', default_value='0.0'),
         DeclareLaunchArgument('initial_z', default_value='0.0'),
@@ -50,6 +51,7 @@ def launch_setup(context):
         'laser_config_file': LaunchConfiguration('laser_config_file').perform(context),
         'enable_imu': LaunchConfiguration('enable_imu').perform(context),
         'imu_config_file': LaunchConfiguration('imu_config_file').perform(context),
+        'enable_odom': LaunchConfiguration('enable_odom').perform(context),
         'initial_x': LaunchConfiguration('initial_x').perform(context),
         'initial_y': LaunchConfiguration('initial_y').perform(context),
         'initial_z': LaunchConfiguration('initial_z').perform(context),
@@ -138,10 +140,16 @@ def generate_robot_launch(config, robot_model_path):
     ## Differential driver
     ros_gz_bridge_configs.append(
         {'args': [
-            'odom@nav_msgs/msg/Odometry[gz.msgs.Odometry',
             'cmd_vel@geometry_msgs/msg/Twist]gz.msgs.Twist'
         ]}
     )
+    ## Odom
+    if config['enable_odom'].lower() == 'true':
+        ros_gz_bridge_configs.append(
+            {'args': [
+                'odom@nav_msgs/msg/Odometry[gz.msgs.Odometry',
+            ]}
+        )
     ## Robot state
     ros_gz_bridge_configs.append(
         {'args': [

@@ -36,6 +36,7 @@ def generate_launch_description():
         DeclareLaunchArgument('rgb_camera_config_file', default_value=default_rgb_camera_config),
         DeclareLaunchArgument('enable_depth_camera', default_value='true'),
         DeclareLaunchArgument('depth_camera_config_file', default_value=default_depth_camera_config),
+        DeclareLaunchArgument('enable_odom', default_value='true'),
         DeclareLaunchArgument('initial_x', default_value='0.0'),
         DeclareLaunchArgument('initial_y', default_value='0.0'),
         DeclareLaunchArgument('initial_z', default_value='0.0'),
@@ -62,6 +63,7 @@ def launch_setup(context):
         'rgb_camera_config_file': LaunchConfiguration('rgb_camera_config_file').perform(context),
         'enable_depth_camera': LaunchConfiguration('enable_depth_camera').perform(context),
         'depth_camera_config_file': LaunchConfiguration('depth_camera_config_file').perform(context),
+        'enable_odom': LaunchConfiguration('enable_odom').perform(context),
         'initial_x': LaunchConfiguration('initial_x').perform(context),
         'initial_y': LaunchConfiguration('initial_y').perform(context),
         'initial_z': LaunchConfiguration('initial_z').perform(context),
@@ -176,10 +178,16 @@ def generate_robot_launch(config, robot_model_path):
     ## Differential driver
     ros_gz_bridge_configs.append(
         {'args': [
-            'odom@nav_msgs/msg/Odometry[gz.msgs.Odometry',
             'cmd_vel@geometry_msgs/msg/Twist]gz.msgs.Twist'
         ]}
     )
+    ## Odom
+    if config['enable_odom'].lower() == 'true':
+        ros_gz_bridge_configs.append(
+            {'args': [
+                'odom@nav_msgs/msg/Odometry[gz.msgs.Odometry',
+            ]}
+        )
     ## Robot state
     ros_gz_bridge_configs.append(
         {'args': [
