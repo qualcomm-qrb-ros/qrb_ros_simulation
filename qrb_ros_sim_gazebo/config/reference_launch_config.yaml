@@ -8,6 +8,8 @@ namespace: ""
 enable_laser: "true"
 # Enable/disable Inertial Measurement Unit (IMU) sensor in the simulated robot
 enable_imu: "true"
+# Enable/disable odometry data publication
+enable_odom: "true"
 # Enable/disable RGB camera sensor in the simulated robot
 enable_rgb_camera: "true"
 # Enable/disable depth camera sensor in the simulated robot

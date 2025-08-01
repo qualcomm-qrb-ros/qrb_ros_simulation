@@ -17,7 +17,11 @@ def generate_launch_description():
     gz_pkg_share = get_package_share_directory(robot_gazebo_pkg)
 
     launch_args = [
-        DeclareLaunchArgument('namespace', default_value='')
+        DeclareLaunchArgument(
+            'namespace',
+            default_value='',
+            description='ROS namespace'
+        )
     ]
 
     return LaunchDescription(launch_args + [
