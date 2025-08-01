@@ -52,6 +52,7 @@ def generate_robot_launch(config, robot_model_path, robot_base_set, camera_set):
             'laser_config': config['laser_config_file'],
             'enable_imu': config['enable_imu'],
             'imu_config': config['imu_config_file'],
+            'enable_odom_tf': config['enable_odom_tf'].lower(),
         }
     )
 

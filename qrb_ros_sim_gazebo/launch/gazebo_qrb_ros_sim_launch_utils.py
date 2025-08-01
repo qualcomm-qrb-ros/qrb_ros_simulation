@@ -100,7 +100,12 @@ def declare_common_launch_arguments(robot_base_set=False, camera_set=False,
         DeclareLaunchArgument(
             'enable_odom',
             default_value='true',
-            description='Enable/disable odometry data publication ("true"/"false")'
+            description='Enable/disable odometry sensor ("true"/"false")'
+        ),
+        DeclareLaunchArgument(
+            'enable_odom_tf',
+            default_value='false',
+            description='Enable/disable odometry tf data publication ("true"/"false")'
         ),
 	]
 
@@ -157,6 +162,7 @@ def get_common_launch_arguments(context, robot_base_set=False, camera_set=False)
             'enable_imu': LaunchConfiguration('enable_imu').perform(context),
             'imu_config_file': LaunchConfiguration('imu_config_file').perform(context),
             'enable_odom': LaunchConfiguration('enable_odom').perform(context),
+            'enable_odom_tf': LaunchConfiguration('enable_odom_tf').perform(context),
         }
         return_launch_config |= robot_base_launch_config
     if camera_set:
