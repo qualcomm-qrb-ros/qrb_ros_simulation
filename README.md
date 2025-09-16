@@ -1,7 +1,7 @@
 <div align="center">
   <h1>QRB ROS Simulation</h1>
   <p align="center">
-    <img src=./resource/qrb_ros_simulation.png alt="Qualcomm QRB ROS" title="Qualcomm QRB ROS" />
+    <img src=./resource/qrb-ros-simulation.png alt="Qualcomm QRB ROS" title="Qualcomm QRB ROS" />
   </p>
   <p>ROS project designed to set up the Qualcomm robotic simulation environment</p>
   
@@ -352,7 +352,7 @@ The `qrb_ros_sim_gazebo` is a ROS 2 package. It provides Gazebo integration and 
 You can setup ROS2 Jazzy on your host machine with ubuntu24.04 OR you can use a docker-based development environment directly.
 
 <details>
-<summary>Ubuntu24.04 Host</summary>
+<summary>Ubuntu24.04 host</summary>
 
 1. Please reference [Install ROS Jazzy](https://docs.ros.org/en/jazzy/index.html) to install ros-jazzy-desktop and setup ROS env.
 2. Install gazebo with ROS and other dependencies
@@ -378,18 +378,14 @@ chmod +x scripts/docker_build.sh
 chmod +x scripts/docker_run.sh
 ./scripts/docker_run.sh
 ```
-3. In a separate terminal, copy the qrb_ros_simulation project to the docker container
-```bash
-docker cp ~/qrb_ros_simulation_ws qrb_ros_simulation_container:/root/qrb_ros_simulation_ws
-```
-4. Enable SSH service in the docker container
+3. Enable SSH service in the docker container
 ```bash
 # set the password of user root
 (docker) passwd
 # enable SSH service
 (docker) service ssh start
 ```
-5. Login to the docker container by SSH
+4. In a separate terminal, login to the docker container by SSH
 ```bash
 ssh -X -p 222 root@your_host_ip
 ```
@@ -456,7 +452,7 @@ ros2 launch qrb_ros_sim_gazebo gazebo_robot_base_mini.launch.py
 ros2 launch qrb_ros_sim_gazebo gazebo_mobile_manipulator.launch.py
 ```
 2. Press the `Play` button to start the simulation
-3. In a separate terminal, load the controllers of Mobile Manipulator Robot
+3. In a separate terminal, load the controllers of RML-63
 ```bash
 cd ~/qrb_ros_simulation_ws
 source install/local_setup.sh
