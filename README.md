@@ -374,15 +374,17 @@ cd qrb_ros_simulation
 chmod +x scripts/docker_build.sh
 ./scripts/docker_build.sh
 ```
-The base image is pulled from the AWS ECR Public mirror of the Docker official images, which works without configuring a registry mirror in the docker daemon. If `docker.io` is reachable from your network, you can use it instead with `docker build --build-arg ROS_BASE_IMAGE=ros:jazzy-ros-base ...`.
+The base image is pulled from the AWS ECR Public mirror of the Docker official images, which works without configuring a registry mirror in the docker daemon. If `docker.io` is reachable from your network, you can use it instead with `docker build --build-arg ROS_BASE_IMAGE=ros:jazzy-ros-base ...`
+
 2. Start a docker container
 ```bash
 chmod +x scripts/docker_run.sh
 ./scripts/docker_run.sh
 ```
-The container starts a remote desktop (XFCE4) served over noVNC. The script prints the URL and password to use, e.g. `http://your_host_ip:6080/vnc.html` (default password `qrbrossim`, override with `VNC_PASSWORD=yourpassword ./scripts/docker_run.sh`).
+The container runs in the background and serves a remote desktop (XFCE4) over noVNC. The script prints the URL to open, e.g. `http://your_host_ip:6080/vnc.html` (default password `qrbrossim`, override with `VNC_PASSWORD=yourpassword ./scripts/docker_run.sh`).
 
 3. Open that URL in a browser and click *Connect*, entering the VNC password when prompted.
+
 4. Inside the remote desktop, open a terminal (right-click desktop > *Open Terminal Here*, or use the Applications menu) to run the commands below.
 
 Next, you can follow the steps of [​Build from source](#-build-from-source)​​ and ​[​Usage](#-usage) to launch the simulation environment within the docker container.
@@ -413,6 +415,15 @@ source install/local_setup.sh
 ## 🚀 Usage
 
 Four pre-configured robotic models are ready to be launched directly.
+
+> [!NOTE]
+> On the very first launch, the world models are downloaded from [Gazebo Fuel](https://app.gazebosim.org/fuel), so Gazebo takes a while to show the scene. The launch output stops at a line such as the one below while the download is in progress — this is expected, just wait for it to finish instead of interrupting the launch:
+>
+> ```
+> [INFO] [1786965553.268950519] [ros_gz_sim]: Requesting list of world names.
+> ```
+>
+> The downloaded models are cached under `~/.gz/fuel` inside the container.
 
 ### 🔹 RML-63 robotic arm
 
