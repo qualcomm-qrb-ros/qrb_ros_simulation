@@ -34,6 +34,7 @@ The `qrb_ros_sim_gazebo` is a ROS 2 package. It provides Gazebo integration and 
   * [Set up development environment](#-set-up-development-environment)
   * [Build from Source](#-build-from-source)
   * [Usage](#-usage)
+  * [Troubleshooting](#-troubleshooting)
   * [Contributing](#-contributing)
   * [Contributors](#%EF%B8%8F-contributors)
   * [License](#-license)
@@ -373,22 +374,16 @@ cd qrb_ros_simulation
 chmod +x scripts/docker_build.sh
 ./scripts/docker_build.sh
 ```
+The base image is pulled from the AWS ECR Public mirror of the Docker official images, which works without configuring a registry mirror in the docker daemon. If `docker.io` is reachable from your network, you can use it instead with `docker build --build-arg ROS_BASE_IMAGE=ros:jazzy-ros-base ...`.
 2. Start a docker container
 ```bash
 chmod +x scripts/docker_run.sh
 ./scripts/docker_run.sh
 ```
-3. Enable SSH service in the docker container
-```bash
-# set the password of user root
-(docker) passwd
-# enable SSH service
-(docker) service ssh start
-```
-4. In a separate terminal, login to the docker container by SSH
-```bash
-ssh -X -p 222 root@your_host_ip
-```
+The container starts a remote desktop (XFCE4) served over noVNC. The script prints the URL and password to use, e.g. `http://your_host_ip:6080/vnc.html` (default password `qrbrossim`, override with `VNC_PASSWORD=yourpassword ./scripts/docker_run.sh`).
+
+3. Open that URL in a browser and click *Connect*, entering the VNC password when prompted.
+4. Inside the remote desktop, open a terminal (right-click desktop > *Open Terminal Here*, or use the Applications menu) to run the commands below.
 
 Next, you can follow the steps of [​Build from source](#-build-from-source)​​ and ​[​Usage](#-usage) to launch the simulation environment within the docker container.
 
@@ -458,6 +453,24 @@ cd ~/qrb_ros_simulation_ws
 source install/local_setup.sh
 ros2 launch qrb_ros_sim_gazebo gazebo_rml_63_gripper_load_controller.launch.py
 ```
+
+---
+
+## 🔧 Troubleshooting
+
+### 🔹 `docker build` fails because the base image cannot be pulled
+
+If the build fails while pulling the base image, with an error such as:
+
+```
+Get "https://registry-1.docker.io/v2/": http: server gave HTTP response to HTTPS client
+```
+
+your network cannot reach Docker Hub directly. This project's dockerfile already defaults to the [AWS ECR Public mirror of the Docker official images](https://gallery.ecr.aws/docker/library/ros), so try the default build first. If your network blocks that too, configure the docker daemon to use a registry mirror or an HTTP proxy — see the official documentation:
+
+- [Registry mirror configuration](https://docs.docker.com/docker-hub/mirror/) — the `registry-mirrors` option in `/etc/docker/daemon.json`
+- [dockerd reference](https://docs.docker.com/reference/cli/dockerd/) — full `daemon.json` reference
+- [Configure the daemon to use a proxy](https://docs.docker.com/engine/daemon/proxy/) — if your network requires an HTTP/HTTPS proxy instead of a mirror
 
 ---
 
