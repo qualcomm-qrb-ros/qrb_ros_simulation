@@ -10,6 +10,7 @@ container_name="${docker_name}_container"
 # override the default VNC password by exporting VNC_PASSWORD before running
 # this script, e.g. `VNC_PASSWORD=mypassword ./scripts/docker_run.sh`
 vnc_password="${VNC_PASSWORD:-qrbrossim}"
+novnc_port="${NOVNC_PORT:-6080}"
 
 # the container is not removed when it exits, so the workspace built inside it
 # and the downloaded Gazebo Fuel models are kept. reuse it when it already
@@ -23,7 +24,8 @@ else
     --name ${container_name} \
     --network host \
     -e VNC_PASSWORD="${vnc_password}" \
+    -e NOVNC_PORT="${novnc_port}" \
     ${docker_name}:${docker_tag}
 fi
 
-echo "Open http://<host_ip>:6080/vnc.html in your browser to access the desktop"
+echo "Open http://<host_ip>:${novnc_port}/vnc.html in your browser to access the desktop"
