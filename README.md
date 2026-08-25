@@ -381,7 +381,7 @@ The base image is pulled from the AWS ECR Public mirror of the Docker official i
 chmod +x scripts/docker_run.sh
 ./scripts/docker_run.sh
 ```
-The container runs in the background and serves a remote desktop (XFCE4) over noVNC. The script prints the URL to open, e.g. `http://your_host_ip:6080/vnc.html` (default password `qrbrossim`, override with `VNC_PASSWORD=yourpassword ./scripts/docker_run.sh`).
+The container runs in the background and serves a remote desktop (XFCE4) over noVNC. The script prints the URL to open, e.g. `http://your_host_ip:6080/vnc.html` (default password `qrbrossim`, override with `VNC_PASSWORD=yourpassword ./scripts/docker_run.sh`). If port 6080 is already in use, choose another noVNC port with `NOVNC_PORT=6081 ./scripts/docker_run.sh`.
 
 3. Open that URL in a browser and click *Connect*, entering the VNC password when prompted.
 

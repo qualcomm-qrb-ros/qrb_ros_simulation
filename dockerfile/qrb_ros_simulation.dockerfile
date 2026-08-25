@@ -19,6 +19,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     xfce4 \
     xfce4-terminal \
     dbus-x11 \
+    iproute2 \
     tigervnc-standalone-server \
     tigervnc-common \
     tigervnc-tools \
